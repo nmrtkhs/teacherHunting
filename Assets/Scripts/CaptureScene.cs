@@ -28,13 +28,6 @@ public class CaptureScene : MonoBehaviour {
 		}
 		webcamTexture.Play();
 
-//		GetComponent<Renderer> ().material.mainTexture = webcamTexture;
-//		color32 = webcamTexture.GetPixels32();
-//		Texture2D texture = new Texture2D(webcamTexture.width, webcamTexture.height);
-//		texture.SetPixels32(color32);
-//		texture.Apply();
-
-//		imageObj.GetComponent<Image> ().sprite = Sprite.Create (texture, new Rect (0, 0, 320, 240), Vector2.zero);
 		imageObj.GetComponent<RawImage>().texture = webcamTexture;
 	}
 	
@@ -44,14 +37,13 @@ public class CaptureScene : MonoBehaviour {
 	}
 
 	public void OnCaptureClick () {
-//		var bytes = webcamTexture.EncodeToPNG();
 		color32 = webcamTexture.GetPixels32();
 		Texture2D texture = new Texture2D(webcamTexture.width, webcamTexture.height);
 		texture.SetPixels32(color32);
 		texture.Apply();
 		var bytes = texture.EncodeToPNG();
 
-		File.WriteAllBytes(Application.dataPath + "/me.png", bytes);
+		File.WriteAllBytes(Application.persistentDataPath + "/me.png", bytes);
 
 		Application.LoadLevel ("Register");
 	}
