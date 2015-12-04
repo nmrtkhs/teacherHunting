@@ -28,16 +28,17 @@ public class GameScene : MonoBehaviour {
 		scoreText = GameObject.Find ("ScoreText").GetComponent<Text> ();
 		questionText = GameObject.Find ("QuestionText").GetComponent<Text> ();
 
-		myPv = PhotonView.Get(this);
-		if(!myPv.isMine){
-			this.enabled = false;
-		}
+//		myPv = PhotonView.Get(this);
+		myPv = this.GetComponent<PhotonView>();
+//		if(!myPv.isMine){
+//			this.enabled = false;
+//		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (!isStart) {
-			Debug.Log("nanto");
+//			Debug.Log("nanto");
 			return;
 		}
 
@@ -47,7 +48,7 @@ public class GameScene : MonoBehaviour {
 		if (leftTime <= 0) {
 			leftTime = .0f;
 		}
-		Debug.Log (leftTime);
+//		Debug.Log (leftTime);
 		timeText.text = ((int)leftTime).ToString ();
 	}
 
@@ -87,7 +88,7 @@ public class GameScene : MonoBehaviour {
 	public void onStart() {
 		isStart = true;
 		updateQuesttion ();
-		Debug.Log (PhotonNetwork.room.playerCount);
+//		Debug.Log (PhotonNetwork.room.playerCount);
 		//GameObject.Find ("StartButton").SetActive (false);
 	}
 }
