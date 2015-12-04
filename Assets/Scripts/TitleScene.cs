@@ -17,5 +17,6 @@ public class TitleScene : MonoBehaviour {
 	}
 
 	public void OnContinueClick() {
+		Application.LoadLevel ("Game");
 	}
 }
