@@ -6,9 +6,11 @@ public class LobbyScene : MonoBehaviour {
 
 	// Use this for initialization
 	private PhotonManager pm;
+	private GameManager gm;
 	Text[] joinNumText;
 	void Start () {
 		pm = GameObject.Find ("PhotonManager").GetComponent<PhotonManager> ();	
+		gm = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 
 		joinNumText = new Text[4];
 		for (int i = 0; i < 4; ++i) {
@@ -26,29 +28,35 @@ public class LobbyScene : MonoBehaviour {
 		foreach (RoomInfo room in PhotonNetwork.GetRoomList()) {
 			
 			int roomNo = 0;
+			string roomName = "";
 			switch (room.name) {
 			case "level1":
 				roomNo = 0;
+				roomName = "たし算";
 				break;
 			case "level2":
 				roomNo = 1;
+				roomName = "ひき算";
 				break;
 			case "level3":
 				roomNo = 2;
+				roomName = "九九";
 				break;
 			case "level4":
 				roomNo = 3;
+				roomName = "いろいろ";
 				break;
 			default:
 				break;
 			}
 
-			joinNumText [roomNo].text = "level:" + roomNo + "\ncount:" + room.playerCount;
+			joinNumText [roomNo].text = roomName + "\nさんか人数:" + room.playerCount;
 		}
 	}
 
 	public void onRoomClick(int i) {
 		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20 };
+		gm.SelectLevel = i;
 		PhotonNetwork.JoinOrCreateRoom("level" + i, roomOptions, TypedLobby.Default);
 	}
 }

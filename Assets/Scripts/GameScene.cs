@@ -4,7 +4,7 @@ using System.Collections;
 
 public class GameScene : MonoBehaviour {
 
-	public float GameTime = 5.0f;
+	public float GameTime = 60f;
 	private float currentTime = .0f;
 	private ScoreObject scoreObject;
 	private float correctAnswer = .0f;
@@ -15,6 +15,8 @@ public class GameScene : MonoBehaviour {
 	Text[] buttonText;
 	Text scoreText;
 	Text questionText;
+	private GameManager gm;
+	private int difficulty = 1;
 	// Use this for initialization
 	void Start () {
 		buttonText = new Text[4];
@@ -31,6 +33,8 @@ public class GameScene : MonoBehaviour {
 
 //		myPv = PhotonView.Get(this);
 		myPv = this.GetComponent<PhotonView>();
+		gm = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		Debug.Log (gm);
 //		if(!myPv.isMine){
 //			this.enabled = false;
 //		}
@@ -38,10 +42,6 @@ public class GameScene : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		foreach (RoomInfo room in PhotonNetwork.GetRoomList()) {
-			Debug.Log (room);
-		}
-			
 		if (!isStart) {
 //			Debug.Log("nanto");
 			return;
@@ -74,11 +74,32 @@ public class GameScene : MonoBehaviour {
 	}
 
 	private void updateQuesttion() {
-		int arg1 = Random.Range (1, 100);
-		int arg2 = Random.Range (1, 100);
-		correctAnswer = arg1 + arg2;
+		int digit = (int)Mathf.Pow(10, difficulty);
+		int arg1 = Random.Range (1, digit);
+		int arg2 = Random.Range (1, digit);
 
-		questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+		switch (gm.SelectLevel) {
+		case 1:
+			correctAnswer = arg1 + arg2;
+			questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+			break;
+		case 2:
+			correctAnswer = arg1 - arg2;
+			questionText.text = arg1.ToString () + " - " + arg2 + " = ?";
+			break;
+		case 3:
+			correctAnswer = arg1 * arg2;
+			questionText.text = arg1.ToString () + " x " + arg2 + " = ?";
+			break;
+		case 4:
+			correctAnswer = arg1 + arg2;
+			questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+			break;
+		default:
+			correctAnswer = arg1 + arg2;
+			questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+			break;
+		}
 
 		int answerNo = Random.Range (0, 4);
 		for (int i = 0; i < buttonText.Length; ++i) {
@@ -95,7 +116,13 @@ public class GameScene : MonoBehaviour {
 		if (correctAnswer == answer) {
 			scoreObject.Score += 30;
 			scoreText.text = scoreObject.Score.ToString ();
-			myPv.RPC("addScore",PhotonTargets.All,scoreObject.Score);
+			myPv.RPC ("addScore", PhotonTargets.All, scoreObject.Score);
+			difficulty++;
+		} else {
+			difficulty--;
+			if (difficulty < 1) {
+				difficulty = 1;
+			}
 		}
 		updateQuesttion ();
 	}
