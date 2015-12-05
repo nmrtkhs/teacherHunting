@@ -6,7 +6,6 @@ public class GameScene : MonoBehaviour {
 
 	public float GameTime = 60f;
 	private float currentTime = .0f;
-	private ScoreObject scoreObject;
 	private float correctAnswer = .0f;
 	private bool isStart = false;
 	private PhotonView myPv;
@@ -15,13 +14,11 @@ public class GameScene : MonoBehaviour {
 	Text[] buttonText;
 	Text scoreText;
 	Text questionText;
-	private GameManager gm;
 	private int difficulty = 1;
 	// Use this for initialization
 	void Start () {
 		buttonText = new Text[4];
 		timeText = GameObject.Find ("TimeText").GetComponent<Text> ();
-		scoreObject = GameObject.Find ("ScoreObject").GetComponent<ScoreObject> ();
 		for (int i = 0; i < 4; ++i) {
 			int buttonNo = i + 1;
 			var goParent = GameObject.Find ("AnswerButton" + buttonNo);
@@ -33,8 +30,7 @@ public class GameScene : MonoBehaviour {
 
 //		myPv = PhotonView.Get(this);
 		myPv = this.GetComponent<PhotonView>();
-		gm = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-		Debug.Log (gm);
+		GameManager.instance.Score = 0;
 //		if(!myPv.isMine){
 //			this.enabled = false;
 //		}
@@ -63,8 +59,8 @@ public class GameScene : MonoBehaviour {
 	[PunRPC]
 	void addScore(int score){
 //		totalScore = score;
-		scoreObject.Score = score;
-		scoreText.text = scoreObject.Score.ToString ();
+		GameManager.instance.Score = score;
+		scoreText.text = GameManager.instance.Score.ToString ();
 	}
 
 	[PunRPC]
@@ -78,7 +74,7 @@ public class GameScene : MonoBehaviour {
 		int arg1 = Random.Range (1, digit);
 		int arg2 = Random.Range (1, digit);
 
-		switch (gm.SelectLevel) {
+		switch (GameManager.instance.SelectLevel) {
 		case 1:
 			correctAnswer = arg1 + arg2;
 			questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
@@ -114,9 +110,9 @@ public class GameScene : MonoBehaviour {
 
 		float answer = float.Parse (buttonText [buttonNo].text);
 		if (correctAnswer == answer) {
-			scoreObject.Score += 30;
-			scoreText.text = scoreObject.Score.ToString ();
-			myPv.RPC ("addScore", PhotonTargets.All, scoreObject.Score);
+			GameManager.instance.Score += 30;
+			scoreText.text = GameManager.instance.Score.ToString ();
+			myPv.RPC ("addScore", PhotonTargets.All, GameManager.instance.Score);
 			difficulty++;
 		} else {
 			difficulty--;

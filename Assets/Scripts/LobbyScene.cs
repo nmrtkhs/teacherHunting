@@ -6,11 +6,9 @@ public class LobbyScene : MonoBehaviour {
 
 	// Use this for initialization
 	private PhotonManager pm;
-	private GameManager gm;
 	Text[] joinNumText;
 	void Start () {
 		pm = GameObject.Find ("PhotonManager").GetComponent<PhotonManager> ();	
-		gm = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 
 		joinNumText = new Text[4];
 		for (int i = 0; i < 4; ++i) {
@@ -56,7 +54,7 @@ public class LobbyScene : MonoBehaviour {
 
 	public void onRoomClick(int i) {
 		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20 };
-		gm.SelectLevel = i;
+		GameManager.instance.SelectLevel = i;
 		PhotonNetwork.JoinOrCreateRoom("level" + i, roomOptions, TypedLobby.Default);
 	}
 }

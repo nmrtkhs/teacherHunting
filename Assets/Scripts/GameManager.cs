@@ -5,9 +5,25 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	public int SelectLevel{ get; set; }
-	void Awake() {
-		DontDestroyOnLoad(this);
+	public int Score{ get; set; }
+
+	static public GameManager instance;
+	void Awake ()
+	{
+		if (instance == null) {
+
+			instance = this;
+			DontDestroyOnLoad (gameObject);
+		}
+		else {
+
+			Destroy (gameObject);
+		}
+
 	}
+//	void Awake() {
+//		DontDestroyOnLoad(this);
+//	}
 
 	void Start () {
 	}

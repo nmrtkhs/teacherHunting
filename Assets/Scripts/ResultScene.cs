@@ -8,7 +8,7 @@ public class ResultScene : MonoBehaviour {
 	void Start () {
 		GameObject.Find ("ScoreText").GetComponent<Text> ().text = 
 			"Score:" + 
-			GameObject.Find ("ScoreObject").GetComponent<ScoreObject> ().Score.ToString ();
+			GameManager.instance.Score.ToString ();
 	}
 	
 	// Update is called once per frame
