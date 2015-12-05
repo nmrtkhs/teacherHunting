@@ -53,6 +53,7 @@ public class GameScene : MonoBehaviour {
 		if (leftTime <= 0) {
 			leftTime = .0f;
 			timeText.text = ((int)leftTime).ToString ();
+			PhotonNetwork.Disconnect ();
 			Application.LoadLevel ("Result");
 		}
 //		Debug.Log (leftTime);

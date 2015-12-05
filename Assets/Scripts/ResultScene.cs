@@ -15,10 +15,10 @@ public class ResultScene : MonoBehaviour {
 	void Update () {
 	}
 
-	void onWorkClick() {
+	public void onWorkClick() {
 	}
 
-	void onLobbySelectClick() {
+	public void onLobbySelectClick() {
 		Application.LoadLevel ("Lobby");
 	}
 }
