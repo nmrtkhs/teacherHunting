@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PhotonManager : Photon.MonoBehaviour {
 
+	private bool isInLobby = false;
 	void Start ()
 	{
 		Debug.Log ("photonStart");
@@ -15,7 +16,12 @@ public class PhotonManager : Photon.MonoBehaviour {
 	{
 		Debug.Log ("photonJoinedLobby");
 		//ランダムにルームに入る
-		PhotonNetwork.JoinRandomRoom();
+		//PhotonNetwork.JoinRandomRoom();
+		isInLobby = true;
+	}
+
+	public bool IsInLobby() {
+		return isInLobby;
 	}
 
 	//ランダムにルームに入れなかった
@@ -23,7 +29,7 @@ public class PhotonManager : Photon.MonoBehaviour {
 	{
 		Debug.Log ("photonRandomJoinFailed");
 		//部屋を自分で作って入る
-		RoomOptions roomOptions = new RoomOptions() { isVisible = false, maxPlayers = 4 };
+		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20 };
 		PhotonNetwork.JoinOrCreateRoom("teacherHunting", roomOptions, TypedLobby.Default);
 	}
 
@@ -33,5 +39,9 @@ public class PhotonManager : Photon.MonoBehaviour {
 		//キャラクター作成
 		//PlayerMake ();
 		Debug.Log("aa-");
+
+		if (Application.loadedLevelName == "Lobby") {
+			Application.LoadLevel ("Game");
+		}
 	}
 }
