@@ -28,18 +28,13 @@ public class GameScene : MonoBehaviour {
 		scoreText = GameObject.Find ("ScoreText").GetComponent<Text> ();
 		questionText = GameObject.Find ("QuestionText").GetComponent<Text> ();
 
-//		myPv = PhotonView.Get(this);
 		myPv = this.GetComponent<PhotonView>();
 		GameManager.instance.Score = 0;
-//		if(!myPv.isMine){
-//			this.enabled = false;
-//		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (!isStart) {
-//			Debug.Log("nanto");
 			return;
 		}
 
@@ -52,13 +47,11 @@ public class GameScene : MonoBehaviour {
 			PhotonNetwork.Disconnect ();
 			Application.LoadLevel ("Result");
 		}
-//		Debug.Log (leftTime);
 		timeText.text = ((int)leftTime).ToString ();
 	}
 
 	[PunRPC]
 	void addScore(int score){
-//		totalScore = score;
 		GameManager.instance.Score = score;
 		scoreText.text = GameManager.instance.Score.ToString ();
 	}
@@ -71,10 +64,14 @@ public class GameScene : MonoBehaviour {
 
 	private void updateQuesttion() {
 		int digit = (int)Mathf.Pow(10, difficulty);
+
 		int arg1 = Random.Range (1, digit);
 		int arg2 = Random.Range (1, digit);
 
 		switch (GameManager.instance.SelectLevel) {
+		bool isPlus = (int)Random.Range (0, 2) == 0 ? true : false;
+
+		switch (gm.SelectLevel) {
 		case 1:
 			correctAnswer = arg1 + arg2;
 			questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
