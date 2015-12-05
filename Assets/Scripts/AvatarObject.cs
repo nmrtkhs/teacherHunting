@@ -19,7 +19,7 @@ public class AvatarObject : MonoBehaviour {
 		}
 
 		gameObject.GetComponent<Image> ().sprite =
-			Sprite.Create (www.texture, new Rect (0, 0, 640, 640), Vector2.zero);	
+			Sprite.Create (www.texture, new Rect (320, 0, 640, 640), Vector2.zero);	
 	}
 	
 	// Update is called once per frame

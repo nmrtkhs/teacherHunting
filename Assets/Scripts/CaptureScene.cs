@@ -22,7 +22,15 @@ public class CaptureScene : MonoBehaviour {
 
 		imageObj = GameObject.Find("RawImage").gameObject as GameObject;
 
-		webcamTexture = new WebCamTexture(devices[0].name, Width, Height, FPS);
+		string deviceName = devices [0].name;
+		foreach (var device in WebCamTexture.devices) {
+			if (device.isFrontFacing) {
+				deviceName = device.name;
+			}	
+		}
+
+		webcamTexture = new WebCamTexture(deviceName, Width, Height, FPS);
+
 		if (webcamTexture == null) {
 			Debug.Log (webcamTexture);
 		}
@@ -41,9 +49,17 @@ public class CaptureScene : MonoBehaviour {
 		Texture2D texture = new Texture2D(webcamTexture.width, webcamTexture.height);
 		texture.SetPixels32(color32);
 		texture.Apply();
+
+//		Sprite sprite = Sprite.Create (texture, new Rect (320, 0, 640, 640), Vector2.zero);
+//		Texture2D outputTexture = sprite.texture;
+
 		var bytes = texture.EncodeToPNG();
+//		var bytes = outputTexture.EncodeToPNG();
 
 		File.WriteAllBytes(Application.persistentDataPath + "/me.png", bytes);
+//		File.WriteAllBytes(Application.dataPath + "/me.png", bytes);
+
+		webcamTexture.Stop();
 
 		Application.LoadLevel ("Register");
 	}
