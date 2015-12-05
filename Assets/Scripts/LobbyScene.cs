@@ -14,9 +14,6 @@ public class LobbyScene : MonoBehaviour {
 		for (int i = 0; i < 4; ++i) {
 			int roomNo = i + 1;
 			joinNumText[i] = GameObject.Find ("JoinNum" + roomNo).GetComponent<Text> ();
-//			var go = goParent.transform.FindChild ("Text").gameObject;
-//			joinNumText[i] = go.GetComponent<Text> ();
-			Debug.Log (joinNumText [i]);
 		}
 	}
 	
@@ -27,7 +24,6 @@ public class LobbyScene : MonoBehaviour {
 		}
 
 		foreach (RoomInfo room in PhotonNetwork.GetRoomList()) {
-			Debug.Log (room);
 			
 			int roomNo = 0;
 			switch (room.name) {

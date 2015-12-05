@@ -4,9 +4,9 @@ using System.Collections;
 
 public class GameScene : MonoBehaviour {
 
-	public float GameTime = 30.0f;
+	public float GameTime = 5.0f;
 	private float currentTime = .0f;
-	private int totalScore = 0;
+	private ScoreObject scoreObject;
 	private float correctAnswer = .0f;
 	private bool isStart = false;
 	private PhotonView myPv;
@@ -19,6 +19,7 @@ public class GameScene : MonoBehaviour {
 	void Start () {
 		buttonText = new Text[4];
 		timeText = GameObject.Find ("TimeText").GetComponent<Text> ();
+		scoreObject = GameObject.Find ("ScoreObject").GetComponent<ScoreObject> ();
 		for (int i = 0; i < 4; ++i) {
 			int buttonNo = i + 1;
 			var goParent = GameObject.Find ("AnswerButton" + buttonNo);
@@ -37,6 +38,10 @@ public class GameScene : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		foreach (RoomInfo room in PhotonNetwork.GetRoomList()) {
+			Debug.Log (room);
+		}
+			
 		if (!isStart) {
 //			Debug.Log("nanto");
 			return;
@@ -47,6 +52,8 @@ public class GameScene : MonoBehaviour {
 		float leftTime = GameTime - currentTime;
 		if (leftTime <= 0) {
 			leftTime = .0f;
+			timeText.text = ((int)leftTime).ToString ();
+			Application.LoadLevel ("Result");
 		}
 //		Debug.Log (leftTime);
 		timeText.text = ((int)leftTime).ToString ();
@@ -54,8 +61,15 @@ public class GameScene : MonoBehaviour {
 
 	[PunRPC]
 	void addScore(int score){
-		totalScore = score;
-		scoreText.text = totalScore.ToString ();
+//		totalScore = score;
+		scoreObject.Score = score;
+		scoreText.text = scoreObject.Score.ToString ();
+	}
+
+	[PunRPC]
+	void start(){
+		isStart = true;
+		updateQuesttion ();
 	}
 
 	private void updateQuesttion() {
@@ -78,17 +92,15 @@ public class GameScene : MonoBehaviour {
 
 		float answer = float.Parse (buttonText [buttonNo].text);
 		if (correctAnswer == answer) {
-			totalScore += 30;
-			scoreText.text = totalScore.ToString ();
-			myPv.RPC("addScore",PhotonTargets.All,totalScore);
+			scoreObject.Score += 30;
+			scoreText.text = scoreObject.Score.ToString ();
+			myPv.RPC("addScore",PhotonTargets.All,scoreObject.Score);
 		}
 		updateQuesttion ();
 	}
 
 	public void onStart() {
 		isStart = true;
-		updateQuesttion ();
-//		Debug.Log (PhotonNetwork.room.playerCount);
-		//GameObject.Find ("StartButton").SetActive (false);
+		myPv.RPC("start",PhotonTargets.All);
 	}
 }
