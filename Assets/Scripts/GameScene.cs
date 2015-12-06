@@ -36,6 +36,8 @@ public class GameScene : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		myPv.RPC("DisableCharacterId", PhotonTargets.All, GameManager.instance.CharacterId);
+
 		if (!isStart) {
 			playerCountText.text = "PlayerCount:" + PhotonNetwork.playerList.Length;	
 			return;
