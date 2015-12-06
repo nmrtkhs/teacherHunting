@@ -13,7 +13,7 @@ public class TitleScene : MonoBehaviour {
 	}
 
 	public void OnStartClick() {
-		Application.LoadLevel ("RegisterNew");
+		Application.LoadLevel ("Lobby");
 	}
 		
 //	public void OnContinueClick() {
