@@ -10,6 +10,7 @@ public class GameScene : MonoBehaviour {
 	private bool isStart = false;
 	private PhotonView myPv;
 
+	Text playerCountText;
 	Text timeText;
 	Text[] buttonText;
 	Text scoreText;
@@ -27,6 +28,7 @@ public class GameScene : MonoBehaviour {
 		}
 		scoreText = GameObject.Find ("ScoreText").GetComponent<Text> ();
 		questionText = GameObject.Find ("QuestionText").GetComponent<Text> ();
+		playerCountText = GameObject.Find ("PlayerCountText").GetComponent<Text> ();
 
 		myPv = this.GetComponent<PhotonView>();
 		GameManager.instance.Score = 0;
@@ -35,6 +37,7 @@ public class GameScene : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!isStart) {
+			playerCountText.text = "PlayerCount:" + PhotonNetwork.playerList.Length;	
 			return;
 		}
 
@@ -69,12 +72,8 @@ public class GameScene : MonoBehaviour {
 		int arg2 = Random.Range (1, digit);
 
 		switch (GameManager.instance.SelectLevel) {
-		bool isPlus = (int)Random.Range (0, 2) == 0 ? true : false;
-
-		switch (gm.SelectLevel) {
 		case 1:
-			correctAnswer = arg1 + arg2;
-			questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+			calcQuestionDigit2 ();
 			break;
 		case 2:
 			correctAnswer = arg1 - arg2;
@@ -100,6 +99,42 @@ public class GameScene : MonoBehaviour {
 		}
 	}
 
+	private void calcQuestionDigit2() {
+		int digit = (int)Mathf.Pow(10, difficulty);
+
+		int arg1Digit1 = Random.Range (0, 10);
+		int arg1Digit2 = 0;
+		bool isPlus = (int)Random.Range (0, 2) == 0 ? true : false;
+		if (isPlus) {
+			arg1Digit2 = Random.Range(0, 9);
+		} else {
+			arg1Digit2 = Random.Range(1, 10);
+		}
+
+		int arg2Digit1 = Random.Range (0, 10);
+		switch (difficulty) {
+		case 1:
+			if (isPlus) {
+				arg2Digit1 = Random.Range (0, 10 - arg1Digit2);
+			} else {
+				arg2Digit1 = Random.Range (0, arg1Digit2 - 1);
+			}
+			break;
+		case 2:
+			arg2Digit1 = Random.Range (0, 10);
+			break;
+		case 3:
+			break;
+		default:
+			break;
+		}
+		int arg1 = int.Parse(arg1Digit1.ToString() + arg1Digit2.ToString());
+		int arg2 = arg2Digit1;
+
+		correctAnswer = arg1 + arg2;
+		questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+	}
+
 	public void onAnswerClick(int buttonNo) {
 		if (!isStart) {
 			return;
@@ -111,6 +146,9 @@ public class GameScene : MonoBehaviour {
 			scoreText.text = GameManager.instance.Score.ToString ();
 			myPv.RPC ("addScore", PhotonTargets.All, GameManager.instance.Score);
 			difficulty++;
+			if (difficulty > 3) {
+				difficulty = 3;
+			}
 		} else {
 			difficulty--;
 			if (difficulty < 1) {

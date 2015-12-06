@@ -36,10 +36,6 @@ public class PhotonManager : Photon.MonoBehaviour {
 	//ルームに入室成功
 	void OnJoinedRoom()
 	{
-		//キャラクター作成
-		//PlayerMake ();
-		Debug.Log("aa-");
-
 		if (Application.loadedLevelName == "Lobby") {
 			Application.LoadLevel ("Game");
 		}
