@@ -4,7 +4,7 @@ using System.Collections;
 
 public class GameScene : MonoBehaviour {
 
-	public float GameTime = 60f;
+	public float GameTime = 120f;
 	private float currentTime = .0f;
 	private float attackingTime = .0f;
 	private float correctAnswer = .0f;
@@ -62,7 +62,7 @@ public class GameScene : MonoBehaviour {
 
 		if (!isInitialized)
 		{
-			bossHP = 150 * PhotonNetwork.playerList.Length;
+			bossHP = 300 * PhotonNetwork.playerList.Length;
 			isInitialized = true;
 		}
 
