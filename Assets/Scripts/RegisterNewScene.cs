@@ -15,6 +15,6 @@ public class RegisterNewScene : MonoBehaviour {
 
 	public void OnCharacterClick(int characterId) {
 		GameManager.instance.CharacterId = characterId;
-		Application.LoadLevel ("Lobby");
+		Application.LoadLevel ("Game");
 	}
 }
