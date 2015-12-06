@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LobbyScene : MonoBehaviour {
 
@@ -51,7 +52,7 @@ public class LobbyScene : MonoBehaviour {
 	}
 
 	public void onRoomClick(int i) {
-		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20 };
+		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20, customRoomProperties = new Hashtable(){"selectedIds",new List<int>()}};
 		GameManager.instance.SelectLevel = i;
 		PhotonNetwork.JoinOrCreateRoom("level" + i, roomOptions, TypedLobby.Default);
 	}
