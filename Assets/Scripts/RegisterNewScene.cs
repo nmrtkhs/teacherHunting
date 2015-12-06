@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 
 public class RegisterNewScene : MonoBehaviour {
@@ -17,18 +16,6 @@ public class RegisterNewScene : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (PhotonNetwork.inRoom) {
-			Room room = PhotonNetwork.room;
-			if (room == null) {
-					return;
-			}
-			Hashtable cp = room.customProperties;
-			List<int> selectedIds = cp["selectedIds"] as List<int>;
-			foreach(int selectedId in selectedIds)
-			{
-				myPv.RPC("DisableCharacterId", PhotonTargets.All, selectedId);
-			}
-		}
 	}
 
 	[PunRPC]
@@ -41,13 +28,6 @@ public class RegisterNewScene : MonoBehaviour {
 	public void OnCharacterClick(int characterId) {
 		GameManager.instance.CharacterId = characterId;
 		myPv.RPC("DisableCharacterId", PhotonTargets.All, characterId);
-
-		Room room = PhotonNetwork.room;
-		Hashtable cp = room.customProperties;
-		List<int> selectedIds = cp["selectedIds"] as List<int>;
-		selectedIds.Add(characterId);
-		cp["selectedIds"] = selectedIds;
-		room.SetCustomProperties(cp);
 
 		Application.LoadLevel ("Game");
 	}
