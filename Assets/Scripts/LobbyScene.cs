@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyScene : MonoBehaviour {
 
@@ -52,7 +53,7 @@ public class LobbyScene : MonoBehaviour {
 	}
 
 	public void onRoomClick(int i) {
-		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20, customRoomProperties = new Hashtable(){"selectedIds",new List<int>()}};
+		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20, customRoomProperties = new Hashtable(){{"selectedIds",new List<int>()}}, customRoomPropertiesForLobby = new string[] {"selectedIds"}};
 		GameManager.instance.SelectLevel = i;
 		PhotonNetwork.JoinOrCreateRoom("level" + i, roomOptions, TypedLobby.Default);
 	}
