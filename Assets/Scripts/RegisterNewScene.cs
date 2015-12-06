@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,11 +8,13 @@ public class RegisterNewScene : MonoBehaviour {
 
 	private PhotonView myPv;
 	private GameObject characterButtonList;
+	private List<int> disableList;
 
 	// Use this for initialization
 	void Start () {
 		myPv = this.GetComponent<PhotonView>();
 		characterButtonList = GameObject.Find("CharacterButtonList");
+		disableList = new List<int>();
 	}
 	
 	// Update is called once per frame
@@ -22,10 +25,16 @@ public class RegisterNewScene : MonoBehaviour {
 	void DisableCharacterId(int id)
 	{
 		GameObject targetCharacter = characterButtonList.transform.GetChild(id).gameObject;
-		targetCharacter.SetActive(false);
+		Image img = targetCharacter.GetComponent<Image>();
+		img.color = new Color(100,100,100,255);
+		disableList.Add(id);
 	}
 
 	public void OnCharacterClick(int characterId) {
+		if(disableList.Contains(characterId))
+		{
+			return;
+		}
 		GameManager.instance.CharacterId = characterId;
 		myPv.RPC("DisableCharacterId", PhotonTargets.All, characterId);
 
