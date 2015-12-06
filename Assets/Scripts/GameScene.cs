@@ -437,7 +437,7 @@ public class GameScene : MonoBehaviour {
 				arg2 = Random.Range (0, 10);
 				arg3 = Random.Range (0, 10);
 				correctAnswer = arg1 * 100 + arg2 * 10 + arg3;
-				questionText.text = "100を" + arg1.ToString () + "こ，10を" + arg2.ToString () + "こ，1を" + arg3.ToString () + "こあつめた数は?です";
+				questionText.text = "100を" + arg1.ToString () + "こ10を" + arg2.ToString () + "こ1を" + arg3.ToString () + "こあつめた数は?";
 				break;
 			case 2:
 				if (Random.Range (0, 2) == 0) {
@@ -464,7 +464,7 @@ public class GameScene : MonoBehaviour {
 				arg1 = (int) Mathf.Pow (10, Random.Range(0, 3));
 				arg2 = Random.Range (10, 100);
 				correctAnswer = arg1 * arg2;
-				questionText.text = arg1.ToString () + "を" + arg2.ToString () + "こ、あつめたかずは?";
+				questionText.text = arg1.ToString () + "を" + arg2.ToString () + "こあつめたかずは?";
 				break;
 			case 2:	
 				arg1 = Random.Range (1, 10) * 100 + Random.Range (0, 10) * 10;
