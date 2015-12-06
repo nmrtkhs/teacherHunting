@@ -13,7 +13,7 @@ public class RegisterNewScene : MonoBehaviour {
 		characterButtonList = GameObject.Find("CharacterButtonList");
 		foreach(PhotonPlayer player in PhotonNetwork.playerList)
 		{
-			Debug.Log(player.name);
+			Debug.Log("id" + player.ID + "name" + player.name);
 		}
 	}
 	
