@@ -6,11 +6,18 @@ public class GameScene : MonoBehaviour {
 
 	public float GameTime = 60f;
 	private float currentTime = .0f;
+	private float attackingTime = .0f;
 	private float correctAnswer = .0f;
 	private bool isStart = false;
 	private bool isInitialized = false;
 	private PhotonView myPv;
 	private int bossHP;
+	private int lastCorrect = 0;
+
+	private GameObject playerAttacks;
+	private Image attackIcon;
+	private GameObject combo;
+	private GameObject hpGuage;
 
 	Text playerCountText;
 	Text timeText;
@@ -34,11 +41,15 @@ public class GameScene : MonoBehaviour {
 		questionText = GameObject.Find ("QuestionText").GetComponent<Text> ();
 		playerCountText = GameObject.Find ("PlayerCountText").GetComponent<Text> ();
 
-		bossHPText = GameObject.Find ("BossHPText").GetComponent<Text> ();
+		playerAttacks = GameObject.Find ("PlayerAttacks");
+		attackIcon = GameObject.Find("AttackIcon").GetComponent<Image>();
+		combo = GameObject.Find("Combo");
+		hpGuage = GameObject.Find("HpGuage");
 
 		myPv = this.GetComponent<PhotonView>();
 		GameManager.instance.Score = 0;
 
+		playerAttacks.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -55,7 +66,13 @@ public class GameScene : MonoBehaviour {
 			isInitialized = true;
 		}
 
-		bossHPText.text = (bossHP - GameManager.instance.Score).ToString();
+		if(bossHP - GameManager.instance.Score <= 0)
+		{
+			PhotonNetwork.Disconnect ();
+			Application.LoadLevel ("Result");
+		}
+
+		hpGuage.transform.localScale = new Vector3(1,(float)(bossHP - GameManager.instance.Score) / bossHP,1);
 
 		// time update
 		currentTime += Time.deltaTime;
@@ -67,6 +84,16 @@ public class GameScene : MonoBehaviour {
 			Application.LoadLevel ("Result");
 		}
 		timeText.text = ((int)leftTime).ToString ();
+
+		if(playerAttacks.activeSelf)
+		{
+			attackingTime += Time.deltaTime;
+			if(attackingTime > 1.0f)
+			{
+				playerAttacks.SetActive(false);
+				attackingTime = 0;
+			}
+		}
 	}
 
 	[PunRPC]
@@ -79,6 +106,20 @@ public class GameScene : MonoBehaviour {
 	void start(){
 		isStart = true;
 		updateQuesttion ();
+	}
+
+	[PunRPC]
+	void SetAttack(int id, int correct)
+	{
+		attackIcon.sprite = Resources.LoadAll<Sprite> ("avatar")[id];
+		if(correct == 1)
+		{
+			combo.SetActive(true);
+		} else {
+			combo.SetActive(false);
+		}
+		playerAttacks.SetActive(true);
+		attackingTime = .0f;
 	}
 
 	private void updateQuesttion() {
@@ -158,18 +199,22 @@ public class GameScene : MonoBehaviour {
 
 		float answer = float.Parse (buttonText [buttonNo].text);
 		if (correctAnswer == answer) {
-			GameManager.instance.Score += 30;
+			GameManager.instance.Score += (30 + 30 * lastCorrect / 2);
 			scoreText.text = GameManager.instance.Score.ToString ();
 			myPv.RPC ("addScore", PhotonTargets.All, GameManager.instance.Score);
+			myPv.RPC ("SetAttack", PhotonTargets.All, GameManager.instance.CharacterId, lastCorrect);
 			difficulty++;
 			if (difficulty > 3) {
 				difficulty = 3;
 			}
+
+			lastCorrect = 1;
 		} else {
 			difficulty--;
 			if (difficulty < 1) {
 				difficulty = 1;
 			}
+			lastCorrect = 0;
 		}
 		updateQuesttion ();
 	}
