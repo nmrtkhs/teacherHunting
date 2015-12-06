@@ -25,8 +25,7 @@ public class RegisterNewScene : MonoBehaviour {
 	void DisableCharacterId(int id)
 	{
 		GameObject targetCharacter = characterButtonList.transform.GetChild(id).gameObject;
-		Image img = targetCharacter.GetComponent<Image>();
-		img.color = new Color(100,100,100,255);
+		targetCharacter.GetComponent<Image>().color = new Color(0.5f,0.5f,0.5f,1);
 		disableList.Add(id);
 	}
 

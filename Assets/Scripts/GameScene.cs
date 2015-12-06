@@ -8,13 +8,17 @@ public class GameScene : MonoBehaviour {
 	private float currentTime = .0f;
 	private float correctAnswer = .0f;
 	private bool isStart = false;
+	private bool isInitialized = false;
 	private PhotonView myPv;
+	private int bossHP;
 
 	Text playerCountText;
 	Text timeText;
 	Text[] buttonText;
 	Text scoreText;
 	Text questionText;
+
+	Text bossHPText;
 	private int difficulty = 1;
 	// Use this for initialization
 	void Start () {
@@ -30,6 +34,8 @@ public class GameScene : MonoBehaviour {
 		questionText = GameObject.Find ("QuestionText").GetComponent<Text> ();
 		playerCountText = GameObject.Find ("PlayerCountText").GetComponent<Text> ();
 
+		bossHPText = GameObject.Find ("BossHPText").GetComponent<Text> ();
+
 		myPv = this.GetComponent<PhotonView>();
 		GameManager.instance.Score = 0;
 
@@ -42,6 +48,14 @@ public class GameScene : MonoBehaviour {
 			playerCountText.text = "PlayerCount:" + PhotonNetwork.playerList.Length;	
 			return;
 		}
+
+		if (!isInitialized)
+		{
+			bossHP = 150 * PhotonNetwork.playerList.Length;
+			isInitialized = true;
+		}
+
+		bossHPText.text = bossHP - GameManager.instance.Score;
 
 		// time update
 		currentTime += Time.deltaTime;
