@@ -55,7 +55,7 @@ public class GameScene : MonoBehaviour {
 			isInitialized = true;
 		}
 
-		bossHPText.text = bossHP - GameManager.instance.Score.ToString();
+		bossHPText.text = (bossHP - GameManager.instance.Score).ToString();
 
 		// time update
 		currentTime += Time.deltaTime;
