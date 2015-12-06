@@ -11,15 +11,14 @@ public class RegisterNewScene : MonoBehaviour {
 	void Start () {
 		myPv = this.GetComponent<PhotonView>();
 		characterButtonList = GameObject.Find("CharacterButtonList");
-		foreach(PhotonPlayer player in PhotonNetwork.playerList)
-		{
-			Debug.Log("id" + player.ID + "name" + player.name);
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		foreach(int disabledId in GameManager.instance.DisabledIds)
+		{
+			DisableCharacterId(disabledId);
+		}
 	}
 
 	[PunRPC]

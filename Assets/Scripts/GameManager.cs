@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
@@ -7,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	public int SelectLevel{ get; set; }
 	public int Score{ get; set; }
 	public int CharacterId{ get; set; }
+	public List<int> DisabledIds{ get; set; }
 
 	static public GameManager instance;
 	void Awake ()

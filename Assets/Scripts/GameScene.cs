@@ -32,11 +32,12 @@ public class GameScene : MonoBehaviour {
 
 		myPv = this.GetComponent<PhotonView>();
 		GameManager.instance.Score = 0;
+
+		myPv.RPC("addDisabledId", PhotonTargets.All, GameManager.instance.CharacterId);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		myPv.RPC("DisableCharacterId", PhotonTargets.All, GameManager.instance.CharacterId);
 
 		if (!isStart) {
 			playerCountText.text = "PlayerCount:" + PhotonNetwork.playerList.Length;	
@@ -53,6 +54,12 @@ public class GameScene : MonoBehaviour {
 			Application.LoadLevel ("Result");
 		}
 		timeText.text = ((int)leftTime).ToString ();
+	}
+
+	[PunRPC]
+	void addDisabledId(int id)
+	{
+		GameManager.instance.DisabledIds.Add(id);
 	}
 
 	[PunRPC]
