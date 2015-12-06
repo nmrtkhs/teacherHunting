@@ -4,10 +4,10 @@ using System.Collections;
 
 public class GameScene : MonoBehaviour {
 
-	public float GameTime = 120f;
+	private float GameTime = 120f;
 	private float currentTime = .0f;
 	private float attackingTime = .0f;
-	private float correctAnswer = .0f;
+	private int correctAnswer = -1;
 	private bool isStart = false;
 	private bool isInitialized = false;
 	private PhotonView myPv;
@@ -123,74 +123,510 @@ public class GameScene : MonoBehaviour {
 	}
 
 	private void updateQuesttion() {
-		int digit = (int)Mathf.Pow(10, difficulty);
-
-		int arg1 = Random.Range (1, digit);
-		int arg2 = Random.Range (1, digit);
-
+		Debug.LogFormat ("Q_level:{0}, difficulty:{1}", GameManager.instance.SelectLevel, difficulty);
+		
 		switch (GameManager.instance.SelectLevel) {
-		case 1:
+		case 0:
 			calcQuestionDigit2 ();
 			break;
 		case 2:
-			correctAnswer = arg1 - arg2;
-			questionText.text = arg1.ToString () + " - " + arg2 + " = ?";
+			calcQuestionDigit3 ();
 			break;
-		case 3:
-			correctAnswer = arg1 * arg2;
-			questionText.text = arg1.ToString () + " x " + arg2 + " = ?";
+		case 1:
+			calcQuestionOver100();
 			break;
 		case 4:
-			correctAnswer = arg1 + arg2;
-			questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+			calcQuestionOver1000();
 			break;
 		default:
-			correctAnswer = arg1 + arg2;
-			questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+			Debug.LogWarning("wrong at switch");
 			break;
 		}
-
+		
+		Debug.LogFormat("CorrectAnswer: {0}", correctAnswer);
+		
 		int answerNo = Random.Range (0, 4);
 		for (int i = 0; i < buttonText.Length; ++i) {
 			buttonText [i].text = (correctAnswer - (answerNo - i)).ToString ();
 		}
 	}
-
+	
 	private void calcQuestionDigit2() {
-		int digit = (int)Mathf.Pow(10, difficulty);
-
-		int arg1Digit1 = Random.Range (0, 10);
-		int arg1Digit2 = 0;
-		bool isPlus = (int)Random.Range (0, 2) == 0 ? true : false;
-		if (isPlus) {
-			arg1Digit2 = Random.Range(0, 9);
-		} else {
-			arg1Digit2 = Random.Range(1, 10);
-		}
-
-		int arg2Digit1 = Random.Range (0, 10);
+		int qType = -1;
+		int arg1Digit10 = 1000;
+		int arg1Digit1 = 1000;
+		int arg2Digit10 = 1000;
+		int arg2Digit1 = 1000;
+		
+		int arg1 = -1;
+		int arg2 = -1;
+		
 		switch (difficulty) {
 		case 1:
-			if (isPlus) {
-				arg2Digit1 = Random.Range (0, 10 - arg1Digit2);
-			} else {
-				arg2Digit1 = Random.Range (0, arg1Digit2 - 1);
+			qType = Random.Range (1, 5);
+			Debug.LogFormat ("calcQuestionDigit2: q_type:{0}", qType);
+			
+			switch(qType){
+			case 1:		//oo+o
+				arg1Digit10 = Random.Range(1, 10);
+				arg1Digit1 = Random.Range(1, 9);
+				arg2Digit10 = 0;
+				arg2Digit1 = Random.Range(1, 10-arg1Digit1);
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				arg2 = arg2Digit10*10 + arg2Digit1;
+				correctAnswer = arg1 + arg2;
+				questionText.text = arg1.ToString () + " + " + arg2.ToString() + " = ?";
+				break;
+			case 2:
+				arg1Digit10 = Random.Range(1, 10);
+				arg1Digit1 = Random.Range(1, 10);
+				arg2Digit10 = Random.Range(1, 10-arg1Digit10);
+				arg2Digit1 = Random.Range(0, 10-arg1Digit1);
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				arg2 = arg2Digit10*10 + arg2Digit1;
+				correctAnswer = arg1 + arg2;
+				questionText.text = arg1.ToString () + " + " + arg2.ToString() + " = ?";
+				break;
+			case 3:
+				arg1Digit10 = Random.Range(1, 10);
+				arg1Digit1 = Random.Range(1, 10);
+				arg2Digit10 = 0;
+				arg2Digit1 = Random.Range(0, arg1Digit1);
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				arg2 = arg2Digit10*10 + arg2Digit1;
+				correctAnswer = arg1 - arg2;
+				questionText.text = arg1.ToString () + " - " + arg2.ToString() + " = ?";
+				break;
+			case 4:
+				arg1Digit10 = Random.Range(1, 10);
+				arg1Digit1 = Random.Range(1, 10);
+				arg2Digit10 = Random.Range(1, arg1Digit10+1);
+				arg2Digit1 = Random.Range(0, arg1Digit1);
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				arg2 = arg2Digit10*10 + arg2Digit1;
+				correctAnswer = arg1 - arg2;
+				questionText.text = arg1.ToString () + " - " + arg2.ToString() + " = ?";
+				break;
+				
+			default:
+				Debug.LogWarning("wrong at switch");
+				break;
+			}
+			break;
+			
+		case 2:
+			qType = Random.Range (1, 3);
+			Debug.LogFormat ("calcQuestionDigit2 q_type:{0}", qType);
+			switch(qType){
+			case 1:
+				arg1Digit10 = Random.Range(1, 9);
+				arg1Digit1 = Random.Range(0, 10);
+				arg2Digit10 = 0;
+				arg2Digit1 = Random.Range(0, 10);
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				arg2 = arg2Digit10*10 + arg2Digit1;
+				correctAnswer = arg1 + arg2;
+				questionText.text = arg1.ToString () + " + " + arg2.ToString() + " = ?";
+				break;
+			case 2:				
+				arg1Digit10 = Random.Range(1, 9);
+				arg1Digit1 = Random.Range(0, 10);
+				arg1 = arg1Digit10*10 + arg1Digit10;
+				arg2 = Random.Range(10, arg1);
+				
+				correctAnswer = arg1 + arg2;
+				questionText.text = arg1.ToString () + " + " + arg2.ToString() + " = ?";
+				break;
+			default:
+				Debug.LogWarning("wrong at switch");
+				break;
+			}
+			break;
+			
+		case 3:
+			qType = Random.Range (1, 5);
+			Debug.LogFormat ("calcQuestionDigit2 q_type:{0}", qType);
+			switch(qType){
+			case 1:
+				arg1Digit10 = Random.Range(1, 10);
+				arg1Digit1 = ((arg1Digit10!=9) ? Random.Range(0, 10) : Random.Range(0, 9));
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				arg2 = arg1 + Random.Range(1, 10);
+				correctAnswer = arg2 - arg1;
+				questionText.text = arg1.ToString () + " + ? = " + arg2.ToString();
+				break;
+			case 2:
+				arg1Digit10 = Random.Range(1, 10);
+				arg1Digit1 = Random.Range(0, 10);
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				correctAnswer = Random.Range(0, arg1);
+				arg2 = arg1 - correctAnswer;
+				questionText.text = arg1.ToString () + " - ? = " + arg2.ToString();
+				break;
+			case 3:
+				arg1Digit10 = Random.Range(1, 9);
+				arg1Digit1 = Random.Range(0, 10);
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				correctAnswer = Random.Range(10, 100-arg1);
+				arg2 = arg1 + correctAnswer;
+				questionText.text = arg1.ToString () + " + ? = " + arg2.ToString();
+				break;
+			case 4:
+				arg1Digit10 = Random.Range(1, 9);
+				arg1Digit1 = Random.Range(1, 10);
+				
+				arg1 = arg1Digit10*10 + arg1Digit1;
+				correctAnswer = Random.Range(10, arg1);
+				arg2 = arg1 - correctAnswer;
+				questionText.text = arg1.ToString () + " - ? = " + arg2.ToString();
+				break;
+				
+			default:
+				Debug.LogWarning("wrong at switch");
+				break;
+			}
+			break;
+		default:
+			Debug.LogWarning("wrong at switch");
+			break;
+		}
+		
+		if (correctAnswer < 0)	Debug.LogWarningFormat("correctAnswer:{0}"	, correctAnswer); 
+		if (arg1 < 0) 	Debug.LogWarningFormat("arg1:{0}"	, arg1);
+		if (arg2 < 0) 	Debug.LogWarningFormat("arg2:{0}"	, arg2);
+	}
+	
+	private void calcQuestionDigit3() {
+		int qType = -1;
+		int arg1Digit100 = 1000;
+		int arg1Digit10 = 1000;
+		int arg1Digit1 = 1000;
+		int arg2Digit10 = 1000;
+		int arg2Digit1 = 1000;
+		
+		int arg1 = -1;
+		int arg2 = -1;
+		
+		switch (difficulty) {
+		case 1:
+			qType = Random.Range (1, 3);
+			Debug.LogFormat ("calcQuestionDigit3: q_type:{0}", qType);
+			
+			switch(qType){
+			case 1:	
+				arg1Digit100 = Random.Range(1, 10);
+				arg1Digit10 = Random.Range(0, 10);
+				arg1Digit1 = Random.Range(1, 9);
+				arg2Digit10 = Random.Range(1, 10-arg1Digit10);
+				arg2Digit1 = Random.Range(0, 10-arg1Digit1);
+				
+				arg1 = arg1Digit100*100 + arg1Digit10*10 + arg1Digit1;
+				arg2 = arg2Digit10*10 + arg2Digit1;
+				correctAnswer = arg1 + arg2;
+				questionText.text = arg1.ToString () + " + " + arg2.ToString() + " = ?";
+				break;
+			case 2 :
+				arg1Digit100 = Random.Range(1, 10);
+				arg1Digit10 = Random.Range(1, 10);
+				arg1Digit1 = Random.Range(1, 9);
+				arg2Digit10 = Random.Range(1, arg1Digit10 + 1);
+				arg2Digit1 = Random.Range(1, arg1Digit1 + 1);
+				
+				arg1 = arg1Digit100*100 + arg1Digit10*10 + arg1Digit1;
+				arg2 = arg2Digit10*10 + arg2Digit1;
+				correctAnswer = arg1 - arg2;
+				questionText.text = arg1.ToString () + " - " + arg2.ToString() + " = ?";
+				break;
+			default:
+				Debug.LogWarning("wrong at switch");
+				break;
+			}
+			break;
+			
+		case 2:
+			qType = Random.Range (1, 3);
+			Debug.LogFormat ("calcQuestionDigit3: q_type:{0}", qType);
+			
+			switch(qType){
+			case 1:	
+				arg1Digit100 = Random.Range(1, 9);
+				arg1Digit10 = Random.Range(0, 10);
+				arg1Digit1 = Random.Range(0, 10);
+				arg1 = arg1Digit100*100 + arg1Digit10*10 + arg1Digit1;
+				arg2 = Random.Range(10, 1000-arg1);
+				
+				correctAnswer = arg1 + arg2;
+				questionText.text = arg1.ToString () + " + " + arg2.ToString() + " = ?";
+				break;
+			case 2 :
+				arg1Digit100 = Random.Range(1, 10);
+				arg1Digit10 = Random.Range(0, 10);
+				arg1Digit1 = Random.Range(0, 10);
+				arg1 = arg1Digit100*100 + arg1Digit10*10 + arg1Digit1;
+				arg2 = Random.Range(10, arg1);
+				correctAnswer = arg1 - arg2;
+				questionText.text = arg1.ToString () + " - " + arg2.ToString() + " = ?";
+				break;
+			default:
+				Debug.LogWarning("wrong at switch");
+				break;
+			}
+			break;
+		case 3:
+			qType = Random.Range (1, 3);
+			Debug.LogFormat ("calcQuestionDigit3: q_type:{0}", qType);
+			
+			switch(qType){
+			case 1:	
+				arg1Digit100 = Random.Range(1, 9);
+				arg1Digit10 = Random.Range(0, 10);
+				arg1Digit1 = Random.Range(0, 10);
+				arg1 = arg1Digit100*100 + arg1Digit10*10 + arg1Digit1;
+				correctAnswer = Random.Range(10, 1000-arg1);
+				
+				arg2 = arg1 + correctAnswer;
+				questionText.text = arg1.ToString () + " + ? = " + arg2.ToString();
+				break;
+			case 2:
+				arg1Digit100 = Random.Range(1, 10);
+				arg1Digit10 = Random.Range(0, 10);
+				arg1Digit1 = Random.Range(0, 10);
+				arg1 = arg1Digit100*100 + arg1Digit10*10 + arg1Digit1;
+				correctAnswer = Random.Range(10, arg1);
+				
+				arg2 = arg1 - correctAnswer;
+				questionText.text = arg1.ToString () + " - ? = " + arg2.ToString();
+				break;
+			default:
+				Debug.LogWarning("wrong at switch");
+				break;
+			}
+			break;
+		default:
+			Debug.LogWarning("wrong at switch");
+			break;
+		}
+		
+		if (correctAnswer < 0)	Debug.LogErrorFormat("correctAnswer:{0}"	, correctAnswer); 
+		if (arg1 < 0) 	Debug.LogErrorFormat("arg1:{0}"	, arg1);
+		if (arg2 < 0) 	Debug.LogErrorFormat("arg2:{0}"	, arg2);
+	}
+	
+	private void calcQuestionOver100() {
+		int qType = -1;
+		int arg1 = -1;
+		int arg2 = -1;
+		int arg3 = -1;
+		
+		switch (difficulty) {
+		case 1:
+			qType = Random.Range (1, 3);
+			Debug.LogFormat ("calcQuestionOver100: q_type:{0}", qType);
+			
+			switch (qType) {
+			case 1:	
+				arg1 = Random.Range (0, 10);
+				arg2 = Random.Range (0, 10);
+				arg3 = Random.Range (0, 10);
+				correctAnswer = arg1 * 100 + arg2 * 10 + arg3;
+				questionText.text = "100を" + arg1.ToString () + "こ，10を" + arg2.ToString () + "こ，1を" + arg3.ToString () + "こあつめた数は?です";
+				break;
+			case 2:
+				if (Random.Range (0, 2) == 0) {
+					arg1 = Random.Range (1, 6) * 100;
+					correctAnswer = arg1 + 400;
+					questionText.text= arg1.ToString () + "-" + (arg1 + 100).ToString () + "-" + (arg1 + 200).ToString () + "-" + (arg1 + 300).ToString () + "-?";
+				} else {
+					arg1 = Random.Range (1, 7) * 100 + 50;
+					correctAnswer = arg1 + 100;
+					questionText.text = arg1.ToString () + "-" + (arg1 + 50).ToString () + "-?-" + (arg1 + 150).ToString () + "-" + (arg1 + 200).ToString ();
+				}
+				break;
+			default:
+				Debug.LogWarning ("wrong at switch");
+				break;
 			}
 			break;
 		case 2:
-			arg2Digit1 = Random.Range (0, 10);
+			qType = Random.Range (1, 3);
+			Debug.LogFormat ("calcQuestionOver100: q_type:{0}", qType);
+			
+			switch (qType) {
+			case 1:	
+				arg1 = (int) Mathf.Pow (10, Random.Range(0, 3));
+				arg2 = Random.Range (10, 100);
+				correctAnswer = arg1 * arg2;
+				questionText.text = arg1.ToString () + "を" + arg2.ToString () + "こ、あつめたかずは?";
+				break;
+			case 2:	
+				arg1 = Random.Range (1, 10) * 100 + Random.Range (0, 10) * 10;
+				correctAnswer = arg1 / 10;
+				questionText.text = arg1.ToString () + "は10を?こあつめたかずです";
+				break;
+			default:
+				Debug.LogWarning ("wrong at switch");
+				break;
+			}
 			break;
+			
 		case 3:
+			qType = Random.Range (1, 5);
+			Debug.LogFormat ("calcQuestionOver100: q_type:{0}", qType);
+			
+			switch (qType) {
+			case 1:	
+				arg1 = Random.Range (100, 1000);
+				arg2 = Random.Range (10, 100);
+				correctAnswer = arg1 - arg2;
+				questionText.text = arg1.ToString () + "より" + arg2.ToString () + "小さいかずは?";
+				break;
+			case 2:	
+				arg1 = Random.Range (100, 1000);
+				arg2 = Random.Range (10, 100);
+				correctAnswer = arg1 + arg2;
+				questionText.text = arg1.ToString () + "より" + arg2.ToString () + "大きいかずは?";
+				break;
+			case 3:
+				arg1 = Random.Range (100, 1000);
+				arg2 = Random.Range (10, 100);
+				arg3 = Random.Range (10, arg1 + arg2);
+				correctAnswer = arg1 + arg2 - arg3;
+				questionText.text = arg1.ToString () + "より" + arg2.ToString () + "大きく" + arg3.ToString () + "小さいかずは?";
+				break;
+			case 4:
+				arg1 = Random.Range (100, 964);	//1000-36
+				arg2 = Random.Range (2, 10);
+				correctAnswer = arg1 + arg2 * 4;
+				questionText.text = arg1.ToString () + "-" + (arg1 + arg2).ToString() + "-" + (arg1 + arg2 * 2).ToString() + "-" + (arg1 + arg2 * 3).ToString() + "-?";
+				break;
+			default:
+				Debug.LogWarning ("wrong at switch");
+				break;
+			}
 			break;
+			
 		default:
-			break;
+			Debug.LogWarning ("wrong at switch");
+			break;	
 		}
-		int arg1 = int.Parse(arg1Digit1.ToString() + arg1Digit2.ToString());
-		int arg2 = arg2Digit1;
-
-		correctAnswer = arg1 + arg2;
-		questionText.text = arg1.ToString () + " + " + arg2 + " = ?";
+		
+		if (correctAnswer < 0)	Debug.LogErrorFormat("correctAnswer:{0}"	, correctAnswer); 
+		
 	}
+	
+	private void calcQuestionOver1000() {
+		int qType = -1;
+		int arg0 = -1;
+		int arg1 = -1;
+		int arg2 = -1;
+		int arg3 = -1;
+		
+		switch (difficulty) {
+		case 1:
+			qType = Random.Range (1, 3);
+			Debug.LogFormat ("calcQuestionOver1000: q_type:{0}", qType);
+			
+			switch (qType) {
+			case 1:	
+				arg0 = Random.Range (0, 10);
+				arg1 = Random.Range (0, 10);
+				arg2 = Random.Range (0, 10);
+				arg3 = Random.Range (0, 10);
+				correctAnswer = arg0*1000 + arg1 * 100 + arg2 * 10 + arg3;
+				questionText.text = "1000を" + arg0.ToString () + "こ，100を" + arg1.ToString () + "こ，10を" + arg2.ToString () + "こ，1を" + arg3.ToString () + "こあつめた数は?です";
+				break;
+			case 2:
+				if (Random.Range (0, 2) == 0) {
+					arg1 = Random.Range (1, 6) * 1000;
+					correctAnswer = arg1 + 4000;
+					questionText.text= arg1.ToString () + "-" + (arg1 + 1000).ToString () + "-" + (arg1 + 2000).ToString () + "-" + (arg1 + 3000).ToString () + "-?";
+				} else {
+					arg1 = Random.Range (1, 7) * 1000 + 500;
+					correctAnswer = arg1 + 1000;
+					questionText.text = arg1.ToString () + "-" + (arg1 + 500).ToString () + "-?-" + (arg1 + 1500).ToString () + "-" + (arg1 + 2000).ToString ();
+				}
+				break;
+			default:
+				Debug.LogWarning ("wrong at switch");
+				break;
+			}
+			break;
+		case 2:
+			qType = Random.Range (1, 3);
+			Debug.LogFormat ("calcQuestionOver1000: q_type:{0}", qType);
+			
+			switch (qType) {
+			case 1:	
+				arg1 = (int) Mathf.Pow (10, Random.Range(0, 4));
+				arg2 = Random.Range (10, 100);
+				correctAnswer = arg1 * arg2;
+				questionText.text = arg1.ToString () + "を" + arg2.ToString () + "こ、あつめたかずは?";
+				break;
+			case 2:	
+				arg1 = Random.Range (1, 10) * 1000 + Random.Range (0, 10) * 100;
+				correctAnswer = arg1 / 100;
+				questionText.text = arg1.ToString () + "は100を?こあつめたかずです";
+				break;
+			default:
+				Debug.LogWarning ("wrong at switch");
+				break;
+			}
+			break;
+			
+		case 3:
+			qType = Random.Range (1, 5);
+			Debug.LogFormat ("calcQuestionOver1000: q_type:{0}", qType);
+			
+			//			switch (qType) {
+			//			case 1:	
+			//				arg1 = Random.Range (100, 1000);
+			//				arg2 = Random.Range (10, 100);
+			//				correctAnswer = arg1 - arg2;
+			//				questionText.text = arg1.ToString () + "より" + arg2.ToString () + "小さいかずは?";
+			//				break;
+			//			case 2:	
+			//				arg1 = Random.Range (100, 1000);
+			//				arg2 = Random.Range (10, 100);
+			//				correctAnswer = arg1 + arg2;
+			//				questionText.text = arg1.ToString () + "より" + arg2.ToString () + "大きいかずは?";
+			//				break;
+			//			case 3:
+			//				arg1 = Random.Range (100, 1000);
+			//				arg2 = Random.Range (10, 100);
+			//				arg3 = Random.Range (10, arg1 + arg2);
+			//				correctAnswer = arg1 + arg2 - arg3;
+			//				questionText.text = arg1.ToString () + "より" + arg2.ToString () + "大きく" + arg3.ToString () + "小さいかずは?";
+			//				break;
+			//			case 4:
+			//				arg1 = Random.Range (100, 964);	//1000-36
+			//				arg2 = Random.Range (2, 10);
+			//				correctAnswer = arg1 + arg2 * 4;
+			//				questionText.text = arg1.ToString () + "-" + (arg1 + arg2).ToString() + "-" + (arg1 + arg2 * 2).ToString() + "-" + (arg1 + arg2 * 3).ToString() + "-?";
+			//				break;
+			//			default:
+			//				Debug.LogWarning ("wrong at switch");
+			//				break;
+			//			}
+			break;
+			
+		default:
+			Debug.LogWarning ("wrong at switch");
+			break;	
+		}
+		
+		if (correctAnswer < 0)	Debug.LogErrorFormat("correctAnswer:{0}"	, correctAnswer); 
+		
+	}
+	
+
 
 	public void onAnswerClick(int buttonNo) {
 		if (!isStart) {
