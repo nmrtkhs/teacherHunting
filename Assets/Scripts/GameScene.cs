@@ -27,6 +27,9 @@ public class GameScene : MonoBehaviour {
 
 	Text bossHPText;
 	private int difficulty = 1;
+
+	private QuestionManager questionManager;
+
 	// Use this for initialization
 	void Start () {
 		buttonText = new Text[4];
@@ -50,6 +53,9 @@ public class GameScene : MonoBehaviour {
 		GameManager.instance.Score = 0;
 
 		playerAttacks.SetActive(false);
+
+		questionManager = this.GetComponent<QuestionManager> ();
+		questionManager.LoadQuestion (GameManager.instance.SelectLevel);
 	}
 	
 	// Update is called once per frame
