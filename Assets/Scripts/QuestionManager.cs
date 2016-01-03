@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Parse;
 
 public class QuestionManager : MonoBehaviour {
 
@@ -14,7 +15,8 @@ public class QuestionManager : MonoBehaviour {
 
 	private int currentQuestionIndex;
 	private int correctAnswer;
-
+	private int currentStage;
+	private int currentDifficulty;
 
 	// Use this for initialization
 	void Awake () {
@@ -36,7 +38,7 @@ public class QuestionManager : MonoBehaviour {
 
 	public void LoadQuestion (int stage) {
 
-		//Load data from Resources
+		currentStage = stage; 
 		string fileName = "question/tsv/test";
 
 		switch (stage){
@@ -65,6 +67,7 @@ public class QuestionManager : MonoBehaviour {
 				LoadQuestion(i);
 			}
 			questionText.fontSize = 34;
+			currentStage = 5; 
 			return;
 		default:
 			Debug.LogErrorFormat("errorStageNum:{0}", stage);
@@ -98,6 +101,7 @@ public class QuestionManager : MonoBehaviour {
 
 		int choiceNum = choiceText.Length;	//4
 		difficulty--;
+		currentDifficulty = difficulty;
 
 		if (difficulty < 0 || difficulty > 3) {
 			Debug.LogWarning ("Wrong Difficulty");
@@ -125,7 +129,59 @@ public class QuestionManager : MonoBehaviour {
 	}
 
 	public bool IsCorrectAnswer (int answer_index){
+		SendToParse (answer_index == correctAnswer);
 		return (answer_index == correctAnswer);
 	}
 
+	void SendToParse (bool isCorrect){
+//		var answerData = new Dictionary<string, string>{
+//			{"stage", currentStage.ToString()},
+//			{"difficulty", (currentDifficulty + 1).ToString()},
+//			{"question", questionList[currentDifficulty][currentQuestionIndex]},
+//			{"answer", isCorrect.ToString()}
+//		};
+//	
+//		ParseAnalytics.TrackEventAsync ("Answer", answerData);
+		
+		ParseObject parseObject = new ParseObject("AnswerLog");
+		parseObject["stage"] = currentStage;
+		parseObject["difficulty"] = currentDifficulty + 1;
+		parseObject["question"] = questionList[currentDifficulty][currentQuestionIndex];
+		parseObject["isCorrect"] = isCorrect;
+
+		parseObject.SaveAsync ().ContinueWith(task =>  {
+			if(CheckTask("Save", task)){	
+				//保存が成功するとObjectIdに一意の文字列が設定される
+				Debug.Log("ObjectId : " + parseObject.ObjectId);
+			}
+		});
+
+	}
+
+	//タスクのチェックを行い、タスク成功時のみTrueを返す
+	bool CheckTask(string taskName, System.Threading.Tasks.Task task){
+		if (task.IsCanceled)
+		{
+			Debug.Log(taskName + "キャンセル");
+		}
+		else if (task.IsFaulted)
+		{
+			Debug.Log(taskName + "失敗");
+			
+			//エラーメッセージ
+			using (IEnumerator<System.Exception> enumerator = task.Exception.InnerExceptions.GetEnumerator()) {
+				if (enumerator.MoveNext()) {
+					ParseException error = (ParseException) enumerator.Current;
+					Debug.Log(error.Message);
+				}
+			}
+		}
+		else
+		{
+			Debug.Log(taskName + "成功");
+			return true;
+		}
+		
+		return false;
+	}
 }
