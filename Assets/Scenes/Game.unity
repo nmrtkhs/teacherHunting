@@ -1265,6 +1265,7 @@ GameObject:
   - 114: {fileID: 1063085339}
   - 114: {fileID: 1063085343}
   - 114: {fileID: 1063085344}
+  - 114: {fileID: 1063085345}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1364,6 +1365,23 @@ MonoBehaviour:
   viewIdField: 2
   instantiationId: 2
   isRuntimeInstantiated: 0
+--- !u!114 &1063085345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1063085338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02179206419b24b63b13094d7e89288b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceText:
+  - {fileID: 1248761882}
+  - {fileID: 1082241542}
+  - {fileID: 158745510}
+  - {fileID: 1135166258}
+  questionText: {fileID: 1756162449}
 --- !u!1 &1082241540
 GameObject:
   m_ObjectHideFlags: 0
@@ -2552,8 +2570,8 @@ RectTransform:
   m_RootOrder: 3
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -29, y: -15}
-  m_SizeDelta: {x: 481, y: 89}
+  m_AnchoredPosition: {x: -53, y: -2.00001144}
+  m_SizeDelta: {x: 432, y: 239}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1756162449
 MonoBehaviour:
@@ -2576,17 +2594,17 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 64
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 4
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Start\u3092\u304A\u3057\u3066"
+  m_Text: "Start\u3092\u304A\u3057\u3066\u304F\u3060\u3055\u3044\n"
 --- !u!222 &1756162450
 CanvasRenderer:
   m_ObjectHideFlags: 0
