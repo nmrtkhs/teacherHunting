@@ -1,24 +1,125 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class ResultScene : MonoBehaviour {
 
+	public Sprite rankS;
+	public Sprite rankA;
+	public Sprite rankB;
+	public Sprite rankC;
+	public Sprite rankD;
+	public Sprite rankE;
+	public Sprite titleWin;
+	public Sprite titleLose;
+	public Sprite enemyWin;
+	public Sprite enemyLose;
+	public Sprite backgroundWin;
+	public Sprite backgroundLose;
+
+
+	private PhotonView myPv;
+	private SortedDictionary<int, int> memberScore;
+	private SortedDictionary<int, int> memberCorrectAnswerNum;
+	private SortedDictionary<int, int> memberInCorrectAnswerNum;
+
+	private bool hasSetRankingList = false;
+	private bool win = true;
+
+	[PunRPC]	//TODO change characterId to characterName
+	void SetMemberScore(int characterId, int score){
+		memberScore.Add (score, characterId);
+	}
+
+	[PunRPC]	//TODO change characterId to characterName
+	void SetMemberAnswerNum(int characterId, int correctAnswerNum, int inCorrectAnswerNum){
+		memberCorrectAnswerNum.Add (correctAnswerNum, characterId);
+		memberInCorrectAnswerNum.Add (inCorrectAnswerNum, characterId);
+	}
+
+
 	// Use this for initialization
 	void Start () {
-		GameObject.Find ("ScoreText").GetComponent<Text> ().text = 
-			"Score:" + 
-			GameManager.instance.Score.ToString ();
+		win = (GameManager.instance.BossHp <= GameManager.instance.Score);
+
+		GameObject.Find ("MyResultText").GetComponent<Text> ().text = 
+			(GameManager.instance.CorrectAnswerNum + GameManager.instance.IncorrectAnswerNum).ToString ()
+				+ "もん中、\n" + GameManager.instance.CorrectAnswerNum.ToString() + "もんせいかい！";
+
+		myPv = this.GetComponent<PhotonView>();
+
+		memberScore = new SortedDictionary<int, int>();
+		myPv.RPC ("SetMemberScore", PhotonTargets.All, GameManager.instance.CharacterId, GameManager.instance.SelfScore);
+
+		memberCorrectAnswerNum = new SortedDictionary<int, int>();
+		memberInCorrectAnswerNum = new SortedDictionary<int, int>();
+		myPv.RPC ("SetMemberAnswerNum", PhotonTargets.All, GameManager.instance.CharacterId, GameManager.instance.CorrectAnswerNum, GameManager.instance.IncorrectAnswerNum);
+
+		GameObject.Find("HpGuage").transform.localScale = new Vector3(1, (GameManager.instance.BossHp > GameManager.instance.Score)? (float)(GameManager.instance.BossHp - GameManager.instance.Score) / GameManager.instance.BossHp : 0, 1);
+
+		if (win) {
+			GameObject.Find ("BackGround").GetComponent<Image> ().sprite = backgroundWin;
+			GameObject.Find ("Title").GetComponent<Image> ().sprite = titleWin;
+			GameObject.Find ("Enemy").GetComponent<Image> ().sprite = enemyWin;
+		} else {
+			GameObject.Find ("BackGround").GetComponent<Image> ().sprite = backgroundLose;
+			GameObject.Find ("TItle").GetComponent<Image> ().sprite = titleLose;
+			GameObject.Find ("Enemy").GetComponent<Image> ().sprite = enemyLose;
+		}
 	}
 	
-	// Update is called once per frame
+	// Update is called once per frame	
 	void Update () {
+		if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
+			SetRankingList ();
+		}
 	}
 
-	public void onWorkClick() {
-	}
+	void SetRankingList(){
+		int playerNum = memberCorrectAnswerNum.Count;
+		int sumCorrectAnswerNum = 0;
+		int sumInCorrectAnswerNum = 0;
 
+		int i = 0;
+		foreach (var member in memberCorrectAnswerNum) {
+			if (i == playerNum - 1) {
+				GameObject.Find("Ranking").GetComponentsInChildren<Text>()[1].text = member.Value.ToString();
+			} else if (i == playerNum - 2) {
+				GameObject.Find("Ranking (1)").GetComponentsInChildren<Text>()[1].text = member.Value.ToString();
+			} else if (i == playerNum - 3) {
+				GameObject.Find("Ranking (2)").GetComponentsInChildren<Text>()[1].text = member.Value.ToString();
+			}
+			sumCorrectAnswerNum += member.Key;
+			i++;
+		}
+
+		foreach (var member in memberInCorrectAnswerNum) {
+			sumInCorrectAnswerNum += member.Key;
+		}
+
+		float correctAnswerRate = (sumCorrectAnswerNum + sumInCorrectAnswerNum > 0? (float)sumCorrectAnswerNum / (sumCorrectAnswerNum + sumInCorrectAnswerNum): 0.0f);
+
+		Image playRank = GameObject.Find ("PlayRank").GetComponent<Image> ();
+		if (GameManager.instance.BossHp > GameManager.instance.Score) {
+			playRank.sprite = rankE;
+		} else if (correctAnswerRate < 0.2f) {
+			playRank.sprite = rankD;
+		} else if (correctAnswerRate < 0.5f) {
+			playRank.sprite = rankC;
+		} else if (correctAnswerRate < 0.7f) {
+			playRank.sprite = rankB;
+		} else if (correctAnswerRate < 0.9f) {
+			playRank.sprite = rankA;
+		} else {
+			playRank.sprite = rankS;
+		}
+
+		hasSetRankingList = true;
+	}
+	
 	public void onLobbySelectClick() {
+		PhotonNetwork.Disconnect ();
 		Application.LoadLevel ("Lobby");
 	}
 }

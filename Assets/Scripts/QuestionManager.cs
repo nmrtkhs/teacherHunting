@@ -129,9 +129,17 @@ public class QuestionManager : MonoBehaviour {
 	}
 
 	public bool IsCorrectAnswer (int answer_index){
-		SendToParse (answer_index == correctAnswer);
-		return (answer_index == correctAnswer);
+		bool isCorrect = (answer_index == correctAnswer);
+		if (isCorrect) {
+			GameManager.instance.CorrectAnswerNum++;
+		} else {
+			GameManager.instance.IncorrectAnswerNum++;
+		}
+		SendToParse (isCorrect);
+		return (isCorrect);
 	}
+
+
 
 	void SendToParse (bool isCorrect){
 //		var answerData = new Dictionary<string, string>{

@@ -39,4 +39,6 @@ MonoBehaviour:
   - start
   - DisableCharacterId
   - SetAttack
+  - SetMemberScore
+  - SetMemberAnswerNum
   DisableAutoOpenWizard: 1

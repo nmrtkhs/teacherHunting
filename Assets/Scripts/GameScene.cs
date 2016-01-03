@@ -51,11 +51,14 @@ public class GameScene : MonoBehaviour {
 
 		myPv = this.GetComponent<PhotonView>();
 		GameManager.instance.Score = 0;
+		GameManager.instance.SelfScore = 0;
 
 		playerAttacks.SetActive(false);
 
 		questionManager = this.GetComponent<QuestionManager> ();
 		questionManager.LoadQuestion (GameManager.instance.SelectLevel);
+		GameManager.instance.IncorrectAnswerNum = 0;
+		GameManager.instance.CorrectAnswerNum = 0;
 	}
 	
 	// Update is called once per frame
@@ -69,12 +72,12 @@ public class GameScene : MonoBehaviour {
 		if (!isInitialized)
 		{
 			bossHP = 300 * PhotonNetwork.playerList.Length;
+			GameManager.instance.BossHp = bossHP;
 			isInitialized = true;
 		}
 
 		if(bossHP - GameManager.instance.Score <= 0)
 		{
-			PhotonNetwork.Disconnect ();
 			Application.LoadLevel ("Result");
 		}
 
@@ -86,7 +89,6 @@ public class GameScene : MonoBehaviour {
 		if (leftTime <= 0) {
 			leftTime = .0f;
 			timeText.text = ((int)leftTime).ToString ();
-			PhotonNetwork.Disconnect ();
 			Application.LoadLevel ("Result");
 		}
 		timeText.text = ((int)leftTime).ToString ();
@@ -136,6 +138,7 @@ public class GameScene : MonoBehaviour {
 
 		if (questionManager.IsCorrectAnswer(buttonNo)) {
 			GameManager.instance.Score += (30 + 30 * lastCorrect / 2);
+			GameManager.instance.SelfScore += (30 + 30 * lastCorrect / 2);
 			scoreText.text = GameManager.instance.Score.ToString ();
 			myPv.RPC ("addScore", PhotonTargets.All, GameManager.instance.Score);
 			myPv.RPC ("SetAttack", PhotonTargets.All, GameManager.instance.CharacterId, lastCorrect);
