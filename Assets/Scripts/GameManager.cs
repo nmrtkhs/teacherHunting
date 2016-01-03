@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour {
 	public int SelectLevel{ get; set; }
 	public int Score{ get; set; }
 	public int CharacterId{ get; set; }
+	public int CorrectAnswerNum{ get; set; }
+	public int IncorrectAnswerNum{ get; set; }
+
 
 	static public GameManager instance;
 	void Awake ()

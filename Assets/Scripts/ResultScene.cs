@@ -6,12 +6,12 @@ public class ResultScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GameObject.Find ("ScoreText").GetComponent<Text> ().text = 
-			"Score:" + 
-			GameManager.instance.Score.ToString ();
+		GameObject.Find ("MyResultText").GetComponent<Text> ().text = 
+			(GameManager.instance.CorrectAnswerNum + GameManager.instance.IncorrectAnswerNum).ToString ()
+				+ "もん中、\n" + GameManager.instance.CorrectAnswerNum.ToString() + "もんせいかい！";
 	}
 	
-	// Update is called once per frame
+	// Update is called once per frame	
 	void Update () {
 	}
 
