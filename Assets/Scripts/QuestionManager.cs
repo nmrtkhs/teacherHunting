@@ -2,67 +2,128 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class QuestionManager : MonoBehaviour {
 
 	public Text[] choiceText;
 	public Text questionText;
 
-	private List<string> questionList;
-	private List<List<string>> answerList;
-	
+	private List<List<string>> questionList;		//Difficulty,QuestionIndex
+	private List<List<List<string>>> answerList;	//Difficulty,QuestionIndex,Choices
+
 	private int currentQuestionIndex;
 	private int correctAnswer;
 
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
 	public void LoadQuestion (int stage) {
-		questionList = new List<string>();
-		answerList = new List<List<string>>();
+		questionList = new List<List<string>>();
+		questionList.Add(new List<string>());
+		questionList.Add(new List<string>());
+		questionList.Add(new List<string>());
 
-		questionList.Add ("Question0");
-		questionList.Add ("Question1");
+		answerList = new List<List<List<string>>>();
+		answerList.Add(new List<List<string>>());
+		answerList.Add(new List<List<string>>());
+		answerList.Add(new List<List<string>>());
+
 		//Load data from Resources/csv
+		string fileName;
+
+		switch (stage){
+		case 0:
+			fileName = "question/0.csv";
+			break;
+		case 1:
+			fileName = "question/1.csv";
+			break;
+		case 2:
+			fileName = "question/2.csv";
+			break;
+		case 3:
+			fileName = "question/3.csv";
+			break;
+		case 4:
+			fileName = "question/4.csv";
+			break;
+		case 5:
+			fileName = "question/5.csv";
+			break;
+		default:
+			Debug.LogWarningFormat("errorStageNum:{0}", stage);
+			break;
+		}
+
+		//DEBUG
+		fileName = "question/test";
+		Debug.Log (fileName);
+
+
+		TextAsset csv = Resources.Load(fileName) as TextAsset;
+		StringReader reader = new StringReader(csv.text);
+		int line = 0;
+
+		while (reader.Peek() > -1) {
+			string[] values = reader.ReadLine().Split(',');
+
+			if (line > 0){
+				int difficulty = int.Parse(values[0]) - 1;	//csv...1~3 -> data...0~2
+				questionList[difficulty].Add(values[1]);
+				var answers = new List<string>();
+				answers.Add(values[2]);
+				answers.Add(values[3]);
+				answers.Add(values[4]);
+				answers.Add(values[5]);
+				answerList[difficulty].Add(answers);
+			}
+			line++;
+    	}
+
+		Debug.LogFormat("QuestionLoaded :" + fileName + "  line:{0}", line);
 	}
 
-	void SetQuestion (int difficulity) {
+	public void SetQuestion (int difficulty) {
 
 		int choiceNum = choiceText.Length;	//4
+		difficulty--;
 
-		currentQuestionIndex = Random.Range (0, questionList.Count);
+		if (difficulty < 0 || difficulty > 3) {
+			Debug.LogWarning ("Wrong Difficulty");
+		}
+
+		currentQuestionIndex = Random.Range (0, questionList[difficulty].Count);
 		correctAnswer = Random.Range (0, choiceNum);
 
 		string[] choice = new string[choiceNum];
 
-		for (int i = 0; i < choiceNum && i < answerList[currentQuestionIndex].Count; i++) {
-			choice [i] = answerList [currentQuestionIndex] [i];
+		for (int i = 0; i < choiceNum && i < answerList[difficulty][currentQuestionIndex].Count; i++) {
+			choice [i] = answerList[difficulty][currentQuestionIndex][i];
 		}
 
 		string tmpChoice = choice [correctAnswer];
 		choice [correctAnswer] = choice[0];
 		choice [0] = tmpChoice;
 
-
-		//set question and choices to textUI
-
-		questionText.text = questionList [currentQuestionIndex];
+		//set question and choices to textUI	
+		questionText.text = questionList[difficulty][currentQuestionIndex];
 		for (int i = 0; i < choiceNum; i++) {
 			choiceText [i].text = choice [i];
 		}
 
 	}
 
-	bool IsCorrectAnswer (int answer_index){
+	public bool IsCorrectAnswer (int answer_index){
 		return (answer_index == correctAnswer);
 	}
-	
+
 }

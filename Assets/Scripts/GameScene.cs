@@ -111,7 +111,7 @@ public class GameScene : MonoBehaviour {
 	[PunRPC]
 	void start(){
 		isStart = true;
-		updateQuesttion ();
+		questionManager.SetQuestion(difficulty);
 	}
 
 	[PunRPC]
@@ -640,7 +640,7 @@ public class GameScene : MonoBehaviour {
 		}
 
 		float answer = float.Parse (buttonText [buttonNo].text);
-		if (correctAnswer == answer) {
+		if (questionManager.IsCorrectAnswer(buttonNo)) {
 			GameManager.instance.Score += (30 + 30 * lastCorrect / 2);
 			scoreText.text = GameManager.instance.Score.ToString ();
 			myPv.RPC ("addScore", PhotonTargets.All, GameManager.instance.Score);
@@ -658,7 +658,7 @@ public class GameScene : MonoBehaviour {
 			}
 			lastCorrect = 0;
 		}
-		updateQuesttion ();
+		questionManager.SetQuestion(difficulty);
 	}
 
 	public void onStart() {
