@@ -74,7 +74,6 @@ public class GameScene : MonoBehaviour {
 
 		if(bossHP - GameManager.instance.Score <= 0)
 		{
-			PhotonNetwork.Disconnect ();
 			Application.LoadLevel ("Result");
 		}
 
@@ -86,7 +85,6 @@ public class GameScene : MonoBehaviour {
 		if (leftTime <= 0) {
 			leftTime = .0f;
 			timeText.text = ((int)leftTime).ToString ();
-			PhotonNetwork.Disconnect ();
 			Application.LoadLevel ("Result");
 		}
 		timeText.text = ((int)leftTime).ToString ();

@@ -42,6 +42,7 @@ public class ResultScene : MonoBehaviour {
 	}
 	
 	public void onLobbySelectClick() {
+		PhotonNetwork.Disconnect ();
 		Application.LoadLevel ("Lobby");
 	}
 }
