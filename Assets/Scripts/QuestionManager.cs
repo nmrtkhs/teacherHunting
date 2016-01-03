@@ -37,27 +37,33 @@ public class QuestionManager : MonoBehaviour {
 		answerList.Add(new List<List<string>>());
 		answerList.Add(new List<List<string>>());
 
-		//Load data from Resources/csv
-		string fileName = "question/test";
+		//Load data from Resources
+		string fileName = "question/tsv/test";
 
 		switch (stage){
 		case 0:
-			fileName = "question/0_2keta";
+			fileName = "question/tsv/0_2keta";
+			questionText.fontSize = 50;
 			break;
 		case 1:
-			fileName = "question/1_over100";
+			fileName = "question/tsv/1_over100";
+			questionText.fontSize = 40;
 			break;
 		case 2:
-			fileName = "question/2_3keta2keta";
+			fileName = "question/tsv/2_3keta2keta";
+			questionText.fontSize = 50;
 			break;
 		case 3:
-			fileName = "question/3_kuku";
+			fileName = "question/tsv/3_kuku";
+			questionText.fontSize = 50;
 			break;
 		case 4:
-			fileName = "question/4_till10000";
+			fileName = "question/tsv/4_till10000";
+			questionText.fontSize = 34;
 			break;
 		case 5:		//all_stage	//TODO
 			Debug.LogWarning ("TODO AllStage Question");
+			questionText.fontSize = 50;
 			break;
 		default:
 			Debug.LogErrorFormat("errorStageNum:{0}", stage);
@@ -69,7 +75,7 @@ public class QuestionManager : MonoBehaviour {
 		int line = 0;
 
 		while (reader.Peek() > -1) {
-			string[] values = reader.ReadLine().Split(',');
+			string[] values = reader.ReadLine().Split('\t');
 
 			if (line > 0){
 				int difficulty = int.Parse(values[0]) - 1;	//csv...1~3 -> data...0~2
