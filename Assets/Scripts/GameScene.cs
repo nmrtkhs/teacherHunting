@@ -72,6 +72,7 @@ public class GameScene : MonoBehaviour {
 		if (!isInitialized)
 		{
 			bossHP = 300 * PhotonNetwork.playerList.Length;
+			GameManager.instance.BossHp = bossHP;
 			isInitialized = true;
 		}
 
