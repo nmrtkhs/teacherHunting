@@ -17,8 +17,16 @@ public class QuestionManager : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
-
+	void Awake () {
+		questionList = new List<List<string>>();
+		questionList.Add(new List<string>());
+		questionList.Add(new List<string>());
+		questionList.Add(new List<string>());
+		
+		answerList = new List<List<List<string>>>();
+		answerList.Add(new List<List<string>>());
+		answerList.Add(new List<List<string>>());
+		answerList.Add(new List<List<string>>());
 	}
 
 	// Update is called once per frame
@@ -27,15 +35,6 @@ public class QuestionManager : MonoBehaviour {
 	}
 
 	public void LoadQuestion (int stage) {
-		questionList = new List<List<string>>();
-		questionList.Add(new List<string>());
-		questionList.Add(new List<string>());
-		questionList.Add(new List<string>());
-
-		answerList = new List<List<List<string>>>();
-		answerList.Add(new List<List<string>>());
-		answerList.Add(new List<List<string>>());
-		answerList.Add(new List<List<string>>());
 
 		//Load data from Resources
 		string fileName = "question/tsv/test";
@@ -61,10 +60,12 @@ public class QuestionManager : MonoBehaviour {
 			fileName = "question/tsv/4_till10000";
 			questionText.fontSize = 34;
 			break;
-		case 5:		//all_stage	//TODO
-			Debug.LogWarning ("TODO AllStage Question");
-			questionText.fontSize = 50;
-			break;
+		case 5:		//all_stage
+			for (int i = 0; i < 5; i++) { 
+				LoadQuestion(i);
+			}
+			questionText.fontSize = 34;
+			return;
 		default:
 			Debug.LogErrorFormat("errorStageNum:{0}", stage);
 			break;
