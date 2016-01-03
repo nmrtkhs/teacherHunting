@@ -910,6 +910,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 328986356da76436481d6b7f43df3383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1617886107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1617886109}
+  - 114: {fileID: 1617886108}
+  m_Layer: 0
+  m_Name: ParseInitializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1617886108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1617886107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 762677091, guid: 7be0a4c5aa9cd44828d824c9af7c93b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applicationID: z4JRvWsnqPxbSbfUYlQtdv054yfjhrcbNWWFDVj9
+  dotnetKey: YsjfmsEsi5hlVC22Aoz0UNbrFRaEUph5KlSUqAP7
+--- !u!4 &1617886109
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1617886107}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 306.856628, y: 168.986359, z: 35.125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
 --- !u!1 &1739213839
 GameObject:
   m_ObjectHideFlags: 0
