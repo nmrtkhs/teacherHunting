@@ -1075,6 +1075,7 @@ GameObject:
   - 114: {fileID: 1063085340}
   - 114: {fileID: 1063085339}
   - 114: {fileID: 1063085343}
+  - 114: {fileID: 1063085344}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1149,6 +1150,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b9696b5ed014b629c291ac27fa11ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1063085344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1063085338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 0
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 3
+  instantiationId: 3
+  isRuntimeInstantiated: 0
 --- !u!1 &1070649850
 GameObject:
   m_ObjectHideFlags: 0

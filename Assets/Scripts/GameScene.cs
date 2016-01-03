@@ -136,6 +136,7 @@ public class GameScene : MonoBehaviour {
 
 		if (questionManager.IsCorrectAnswer(buttonNo)) {
 			GameManager.instance.Score += (30 + 30 * lastCorrect / 2);
+			GameManager.instance.SelfScore += (30 + 30 * lastCorrect / 2);
 			scoreText.text = GameManager.instance.Score.ToString ();
 			myPv.RPC ("addScore", PhotonTargets.All, GameManager.instance.Score);
 			myPv.RPC ("SetAttack", PhotonTargets.All, GameManager.instance.CharacterId, lastCorrect);
