@@ -20,7 +20,6 @@ public class ResultScene : MonoBehaviour {
 				+ "もん中、\n" + GameManager.instance.CorrectAnswerNum.ToString() + "もんせいかい！";
 
 		memberScore = new SortedDictionary<int, int>();
-		memberScore.Add (GameManager.instance.SelfScore, GameManager.instance.CharacterId);
 		myPv = this.GetComponent<PhotonView>();
 		myPv.RPC ("SetMemberScore", PhotonTargets.All, GameManager.instance.CharacterId, GameManager.instance.SelfScore);
 	}

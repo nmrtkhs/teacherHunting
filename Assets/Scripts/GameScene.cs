@@ -51,11 +51,14 @@ public class GameScene : MonoBehaviour {
 
 		myPv = this.GetComponent<PhotonView>();
 		GameManager.instance.Score = 0;
+		GameManager.instance.SelfScore = 0;
 
 		playerAttacks.SetActive(false);
 
 		questionManager = this.GetComponent<QuestionManager> ();
 		questionManager.LoadQuestion (GameManager.instance.SelectLevel);
+		GameManager.instance.IncorrectAnswerNum = 0;
+		GameManager.instance.CorrectAnswerNum = 0;
 	}
 	
 	// Update is called once per frame
