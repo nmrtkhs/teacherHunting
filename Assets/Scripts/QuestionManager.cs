@@ -38,36 +38,31 @@ public class QuestionManager : MonoBehaviour {
 		answerList.Add(new List<List<string>>());
 
 		//Load data from Resources/csv
-		string fileName;
+		string fileName = "question/test";
 
 		switch (stage){
 		case 0:
-			fileName = "question/0.csv";
+			fileName = "question/0_2keta";
 			break;
 		case 1:
-			fileName = "question/1.csv";
+			fileName = "question/1_over100";
 			break;
 		case 2:
-			fileName = "question/2.csv";
+			fileName = "question/2_3keta2keta";
 			break;
 		case 3:
-			fileName = "question/3.csv";
+			fileName = "question/3_kuku";
 			break;
 		case 4:
-			fileName = "question/4.csv";
+			fileName = "question/4_till10000";
 			break;
-		case 5:
-			fileName = "question/5.csv";
+		case 5:		//all_stage	//TODO
+			Debug.LogWarning ("TODO AllStage Question");
 			break;
 		default:
-			Debug.LogWarningFormat("errorStageNum:{0}", stage);
+			Debug.LogErrorFormat("errorStageNum:{0}", stage);
 			break;
 		}
-
-		//DEBUG
-		fileName = "question/test";
-		Debug.Log (fileName);
-
 
 		TextAsset csv = Resources.Load(fileName) as TextAsset;
 		StringReader reader = new StringReader(csv.text);

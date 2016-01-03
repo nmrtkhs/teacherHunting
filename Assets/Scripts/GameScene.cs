@@ -639,7 +639,6 @@ public class GameScene : MonoBehaviour {
 			return;
 		}
 
-		float answer = float.Parse (buttonText [buttonNo].text);
 		if (questionManager.IsCorrectAnswer(buttonNo)) {
 			GameManager.instance.Score += (30 + 30 * lastCorrect / 2);
 			scoreText.text = GameManager.instance.Score.ToString ();
