@@ -27,9 +27,13 @@ public class RegisterNewScene : MonoBehaviour {
 	[PunRPC]
 	void DisableCharacterId(int id)
 	{
-		GameObject targetCharacter = characterButtonList.transform.GetChild(id).gameObject;
+		GameObject targetCharacter = characterButtonList.transform.GetChild(id - 1).gameObject;
 		targetCharacter.GetComponent<Image>().color = new Color(0.5f,0.5f,0.5f,1);
 		disableList.Add(id);
+	}
+
+	public void OnBackButtonClicke() {
+		Application.LoadLevel ("RegisterName");
 	}
 
 	public void OnCharacterClick(int characterId) {
