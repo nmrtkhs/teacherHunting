@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
 	public int IncorrectAnswerNum{ get; set; }
 	public int BossHp{ get; set; }
 	public string name{ get; set; }
+    public int difficulty{ get; set; }
 
 	static public GameManager instance;
 	void Awake ()
