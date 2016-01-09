@@ -119,7 +119,7 @@ public class GameScene : MonoBehaviour {
 	[PunRPC]
 	void SetAttack(int id, int correct)
 	{
-		attackIcon.sprite = Resources.LoadAll<Sprite> ("avatar")[id];
+		attackIcon.sprite = Resources.Load<Sprite> ("avatar/avatar_" + id);
 		if(correct == 1)
 		{
 			combo.SetActive(true);
