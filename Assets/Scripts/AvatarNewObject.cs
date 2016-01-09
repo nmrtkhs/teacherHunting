@@ -6,7 +6,7 @@ public class AvatarNewObject : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GetComponent<Image>().sprite = Resources.LoadAll<Sprite> ("avatar")[GameManager.instance.CharacterId];
+		GetComponent<Image>().sprite = Resources.Load<Sprite> ("avatar/avatar_" + GameManager.instance.CharacterId);
 	}
 	
 	// Update is called once per frame
