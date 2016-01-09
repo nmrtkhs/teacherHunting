@@ -36,7 +36,8 @@ MonoBehaviour:
   - RequestForPickupTimes
   - TaggedPlayer
   - addScore
-  - start
+  - GameStart
   - DisableCharacterId
   - SetAttack
+  - SetCorrect
   DisableAutoOpenWizard: 1

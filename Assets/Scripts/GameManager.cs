@@ -8,31 +8,18 @@ public class GameManager : MonoBehaviour {
 	public int SelectLevel{ get; set; }
 	public int Score{ get; set; }
 	public int CharacterId{ get; set; }
+    public int difficulty{ get; set; }
 
 	static public GameManager instance;
 	void Awake ()
 	{
 		if (instance == null) {
-
 			instance = this;
 			DontDestroyOnLoad (gameObject);
 		}
-		else {
-
+		else
+		{
 			Destroy (gameObject);
 		}
-
-	}
-//	void Awake() {
-//		DontDestroyOnLoad(this);
-//	}
-
-	void Start () {
-	}
-
-
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

@@ -7,7 +7,7 @@ using Parse;
 
 public class QuestionManager : MonoBehaviour {
 
-	public Text[] choiceText;
+	public Text [] choiceText;
 	public Text questionText;
 
 	private List<List<string>> questionList;		//Difficulty,QuestionIndex
@@ -129,8 +129,16 @@ public class QuestionManager : MonoBehaviour {
 	}
 
 	public bool IsCorrectAnswer (int answer_index){
-		SendToParse (answer_index == correctAnswer);
-		return (answer_index == correctAnswer);
+        bool isCorrect;
+        if (answer_index == -1) {
+            isCorrect = false;
+        } else if (answer_index == correctAnswer) {
+            isCorrect = true;
+        } else {
+            isCorrect = false;
+        }
+		SendToParse (isCorrect);
+		return isCorrect;
 	}
 
 	void SendToParse (bool isCorrect){
