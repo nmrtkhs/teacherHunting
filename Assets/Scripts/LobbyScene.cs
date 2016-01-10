@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class LobbyScene : MonoBehaviour {
 
-	public bool LobbyInActvie;
+	public bool LobbyInActive;
 	public GameObject Flash;
 
 	private int m_Level;
@@ -34,6 +34,10 @@ public class LobbyScene : MonoBehaviour {
 		if (!pm.IsInLobby()) {
 			return;
 		}
+        else
+        {
+            LobbyInActive = true;
+        }
 
 		foreach (RoomInfo room in PhotonNetwork.GetRoomList()) {
 			
@@ -57,8 +61,6 @@ public class LobbyScene : MonoBehaviour {
 			default:
 				break;
 			}
-
-//			joinNumText [roomNo].text = "さんか人数:" + room.playerCount;
 		}
 	}
 			
@@ -66,17 +68,13 @@ public class LobbyScene : MonoBehaviour {
         if (!pm.IsInLobby ()) {
             return;
         }
-		if(LobbyInActvie == true){
+	    Flash.GetComponent<Animator>().SetTrigger("OnClick");
+		if(LobbyInActive == true){
 			SceneChange(m_Level);
-			LobbyInActvie = false;
+			LobbyInActive = false;
 		}
 	}
-	public void OnRoomClick(int level) {
-		Debug.Log ("OnRoomClick");
-		m_Level = level;
-	Flash.GetComponent<Animator>().SetTrigger("OnClick");
-	}
-	
+
 	public void SceneChange(int i) {
 		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20 };
 		GameManager.instance.SelectLevel = i;
