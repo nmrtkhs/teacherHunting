@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 public class LobbyScene : MonoBehaviour {
 
+	public bool LobbyInActvie;
+	public GameObject Flash;
+
+	private int m_Level;
+	
 	// Use this for initialization
 	private PhotonManager pm;
 	Text[] joinNumText;
@@ -16,11 +21,12 @@ public class LobbyScene : MonoBehaviour {
         playerHash.Add ("isInGame", 0);
         playerHash.Add ("characterId", -1);
         PhotonNetwork.player.SetCustomProperties (playerHash);
-//		joinNumText = new Text[5];
-//		for (int i = 0; i < 5; ++i) {
-//			int roomNo = i + 1;
-//			joinNumText[i] = GameObject.Find ("JoinNum" + roomNo).GetComponent<Text> ();
-//		}
+
+		joinNumText = new Text[5];
+		for (int i = 0; i < 5; ++i) {
+			int roomNo = i + 1;
+			//joinNumText[i] = GameObject.Find ("JoinNum" + roomNo).GetComponent<Text> ();
+		}
 	}
 	
 	// Update is called once per frame
@@ -55,11 +61,23 @@ public class LobbyScene : MonoBehaviour {
 //			joinNumText [roomNo].text = "さんか人数:" + room.playerCount;
 		}
 	}
-
+			
 	public void onRoomClick(int i) {
         if (!pm.IsInLobby ()) {
             return;
         }
+		if(LobbyInActvie == true){
+			SceneChange(m_Level);
+			LobbyInActvie = false;
+		}
+	}
+	public void OnRoomClick(int level) {
+		Debug.Log ("OnRoomClick");
+		m_Level = level;
+	Flash.GetComponent<Animator>().SetTrigger("OnClick");
+	}
+	
+	public void SceneChange(int i) {
 		RoomOptions roomOptions = new RoomOptions() { isVisible = true, maxPlayers = 20 };
 		GameManager.instance.SelectLevel = i;
 		PhotonNetwork.JoinOrCreateRoom("level" + i, roomOptions, TypedLobby.Default);
