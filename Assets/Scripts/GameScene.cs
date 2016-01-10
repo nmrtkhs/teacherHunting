@@ -127,7 +127,6 @@ public class GameScene : MonoBehaviour {
 
 		if (bossHP - GameManager.instance.Score <= 0)
 		{
-			PhotonNetwork.Disconnect ();
 			Application.LoadLevel ("Result");
 		}
 
