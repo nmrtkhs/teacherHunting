@@ -17,8 +17,10 @@ public class ResultScene : MonoBehaviour {
 	public Sprite[] enemyLose;
 	public Sprite backgroundWin;
 	public Sprite backgroundLose;
+	public bool ResultActvie;
 	public bool ResultInActvie;
 	public GameObject Canvas;
+	public GameObject Ending;
 	
 	private PhotonView myPv;
 	private SortedDictionary<int, string> memberScore;
@@ -44,6 +46,19 @@ public class ResultScene : MonoBehaviour {
 	void Start () {
 		win = (GameManager.instance.BossHp <= GameManager.instance.Score);
 
+		if (win && GameManager.instance.SelectLevel == 5) {
+			Ending.SetActive(true);
+			ResultActvie = false;
+		} else {
+			Ending.SetActive(false);
+			ResultOn();
+		}
+	}
+
+	public void ResultOn() {
+		ResultActvie = true;
+		Canvas.GetComponent<Animator>().SetTrigger("OnResultStart");
+
 		GameObject.Find ("MyResultText").GetComponent<Text> ().text = 
 			(GameManager.instance.CorrectAnswerNum + GameManager.instance.IncorrectAnswerNum).ToString ()
 				+ "もん中、\n" + GameManager.instance.CorrectAnswerNum.ToString() + "もんせいかい！";
@@ -65,20 +80,24 @@ public class ResultScene : MonoBehaviour {
 			GameObject.Find ("Enemy").GetComponent<Image> ().sprite = enemyWin[GameManager.instance.SelectLevel];
 		} else {
 			GameObject.Find ("BackGround").GetComponent<Image> ().sprite = backgroundLose;
-			GameObject.Find ("TItle").GetComponent<Image> ().sprite = titleLose;
+			GameObject.Find ("Title").GetComponent<Image> ().sprite = titleLose;
 			GameObject.Find ("Enemy").GetComponent<Image> ().sprite = enemyLose[GameManager.instance.SelectLevel];
 		}
 	}
+
 	
 	// Update is called once per frame	
 	void Update () {
-		if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
-			SetRankingList ();
-		}
 
-		if(ResultInActvie == true){
-			SceneChange();
-			ResultInActvie = false;
+		if (ResultActvie) {
+			if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
+				SetRankingList ();
+			}
+
+			if (ResultInActvie == true) {
+				SceneChange ();
+				ResultInActvie = false;
+			}
 		}
 	}
 
