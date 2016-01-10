@@ -1260,8 +1260,20 @@ MonoBehaviour:
   rankE: {fileID: 21300000, guid: 6d7bed1d82df64e9a9fb29f54540c2d1, type: 3}
   titleWin: {fileID: 21300000, guid: 94cd088a9f319ac449bfe6eeabe5bd7a, type: 3}
   titleLose: {fileID: 21300000, guid: dff12a5e41aeeb0498a350de2fafdbff, type: 3}
-  enemyWin: {fileID: 21300000, guid: 9c01c3b60ad9845aebdffbbc018f8539, type: 3}
-  enemyLose: {fileID: 21300000, guid: e15bc7cb9ce6a4f589eacd825f1e305a, type: 3}
+  enemyWin:
+  - {fileID: 21300000, guid: bccb56274c96b410fa4636c4ab355136, type: 3}
+  - {fileID: 21300000, guid: 9c01c3b60ad9845aebdffbbc018f8539, type: 3}
+  - {fileID: 21300000, guid: be34b16ddf5a94fe291f7a487c5bbbb7, type: 3}
+  - {fileID: 21300000, guid: 73cce2163d593466dbd7b8aa380f9796, type: 3}
+  - {fileID: 21300000, guid: 41224461a882f4baf8290cc421f500ea, type: 3}
+  - {fileID: 21300000, guid: 9b7b3cb6a6fa64a92a036666a70e9321, type: 3}
+  enemyLose:
+  - {fileID: 21300000, guid: d83daadc4b24442a19f07ac537a8173e, type: 3}
+  - {fileID: 21300000, guid: e15bc7cb9ce6a4f589eacd825f1e305a, type: 3}
+  - {fileID: 21300000, guid: 9975e9bd5d68e4af5b35b0f6959f51c1, type: 3}
+  - {fileID: 21300000, guid: 8da835ddc435d48a2ac92622348e76c6, type: 3}
+  - {fileID: 21300000, guid: 2605315d85c96402ebb1de67523c0c3e, type: 3}
+  - {fileID: 21300000, guid: d273b316043d74f86bf2c7663479e2a7, type: 3}
   backgroundWin: {fileID: 21300000, guid: 67f436a094b8e4d4d9b49e104555cfef, type: 3}
   backgroundLose: {fileID: 21300000, guid: c0d5aae1b177e90429c62fb34b09e034, type: 3}
   ResultInActvie: 0

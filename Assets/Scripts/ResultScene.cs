@@ -13,13 +13,13 @@ public class ResultScene : MonoBehaviour {
 	public Sprite rankE;
 	public Sprite titleWin;
 	public Sprite titleLose;
-	public Sprite enemyWin;
-	public Sprite enemyLose;
+	public Sprite[] enemyWin;
+	public Sprite[] enemyLose;
 	public Sprite backgroundWin;
 	public Sprite backgroundLose;
 	public bool ResultInActvie;
 	public GameObject Canvas;
-
+	
 	private PhotonView myPv;
 	private SortedDictionary<int, string> memberScore;
 	private SortedDictionary<int, string> memberCorrectAnswerNum;
@@ -62,11 +62,11 @@ public class ResultScene : MonoBehaviour {
 		if (win) {
 			GameObject.Find ("BackGround").GetComponent<Image> ().sprite = backgroundWin;
 			GameObject.Find ("Title").GetComponent<Image> ().sprite = titleWin;
-			GameObject.Find ("Enemy").GetComponent<Image> ().sprite = enemyWin;
+			GameObject.Find ("Enemy").GetComponent<Image> ().sprite = enemyWin[GameManager.instance.SelectLevel];
 		} else {
 			GameObject.Find ("BackGround").GetComponent<Image> ().sprite = backgroundLose;
 			GameObject.Find ("TItle").GetComponent<Image> ().sprite = titleLose;
-			GameObject.Find ("Enemy").GetComponent<Image> ().sprite = enemyLose;
+			GameObject.Find ("Enemy").GetComponent<Image> ().sprite = enemyLose[GameManager.instance.SelectLevel];
 		}
 	}
 	
