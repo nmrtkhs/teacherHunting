@@ -42,6 +42,8 @@ public class ResultScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		GameObject.Find ("Ending").SetActive (false);
+
 		win = (GameManager.instance.BossHp <= GameManager.instance.Score);
 
 		GameObject.Find ("MyResultText").GetComponent<Text> ().text = 
