@@ -9,8 +9,8 @@ public class RegisterNameScene : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_inputFieldName = GameObject.Find ("InputFieldName").GetComponent<InputField> ();
-		_textWarning = GameObject.Find ("TextWarning").GetComponent<Text> ();
-		_textWarning.enabled = false;
+//		_textWarning = GameObject.Find ("TextWarning").GetComponent<Text> ();
+//		_textWarning.enabled = false;
 		var name = PlayerPrefs.GetString ("PlayerName");
 		if (!string.IsNullOrEmpty (name)) {
 			UnityEngine.Debug.Log (name);

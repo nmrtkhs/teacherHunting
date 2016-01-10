@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class RegisterNewScene : MonoBehaviour {
 
+	public GameObject LevelChoice;
 	private PhotonView myPv;
 	private GameObject characterButtonList;
 	private List<int> disableList;
@@ -49,6 +50,10 @@ public class RegisterNewScene : MonoBehaviour {
         SetDifficulty ();
         PhotonNetwork.player.SetCustomProperties (playerHash);
 		Application.LoadLevel ("Game");
+	}
+
+	public void OnLevelValueChange() {
+	LevelChoice.GetComponent<Animator>().SetTrigger("OnValueChange");
 	}
 
     void SetDifficulty()
