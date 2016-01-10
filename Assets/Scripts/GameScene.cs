@@ -138,6 +138,7 @@ public class GameScene : MonoBehaviour {
 
 		if (bossHP - GameManager.instance.Score <= 0)
 		{
+			AudioManager.Instance.StopBGM ();
 			Application.LoadLevel ("Result");
 		}
 
@@ -163,6 +164,7 @@ public class GameScene : MonoBehaviour {
 
 	[PunRPC]
 	void GameStart(){
+		AudioManager.Instance.PlayBGM ("battlebgm");
 		isStart = true;
         startButton.SetActive (false);
         StartQuestion();
