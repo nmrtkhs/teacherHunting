@@ -42,4 +42,5 @@ MonoBehaviour:
   - SetCorrect
   - SetMemberScore
   - SetMemberAnswerNum
+  - SetPlayerName
   DisableAutoOpenWizard: 1

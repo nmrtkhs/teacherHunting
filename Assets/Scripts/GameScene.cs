@@ -22,6 +22,8 @@ public class GameScene : MonoBehaviour {
 	private GameObject combo;
 	private GameObject hpGuage;
 	private GameObject startButton;
+    private GameObject targetCircle;
+    private GameObject panel;
 
 	Text[] buttonText;
     Text timeText;
@@ -40,6 +42,7 @@ public class GameScene : MonoBehaviour {
     Dictionary<int, GameObject> characterDictionary;
 
 	private int difficulty;
+    private int correctCount;
 	private QuestionManager questionManager;
 
 	// Use this for initialization
@@ -49,6 +52,7 @@ public class GameScene : MonoBehaviour {
 		playerAttacks = GameObject.Find ("PlayerAttacks");
         combo = GameObject.Find("Combo");
 		hpGuage = GameObject.Find("HpGuage");
+        panel = GameObject.Find("Panel");
 
 		startButton = GameObject.Find("StartButton");
 		startButton.SetActive(false);
@@ -62,6 +66,7 @@ public class GameScene : MonoBehaviour {
 		questionManager.LoadQuestion (GameManager.instance.SelectLevel);
 
         questionText = GameObject.Find ("QuestionText").GetComponent<Text> ();
+        questionText.text = "みんなが入るまで待ってね";
 
         answerText1 = GameObject.Find ("AnswerText1").GetComponent<Text> ();
         answerText2 = GameObject.Find ("AnswerText2").GetComponent<Text> ();
@@ -74,6 +79,11 @@ public class GameScene : MonoBehaviour {
         answerButtons [2] = GameObject.Find ("AnswerButton3").GetComponent<Button> ();
         answerButtons [3] = GameObject.Find ("AnswerButton4").GetComponent<Button> ();
 
+        foreach (Button button in answerButtons)
+        {
+            button.gameObject.SetActive(false);
+        }
+
         questionIndex = 1;
         answerNum = -1;
         remainTurn = 10;
@@ -81,7 +91,7 @@ public class GameScene : MonoBehaviour {
         isAnswering = false;
         difficulty = GameManager.instance.difficulty + 1;
         difficultyText = GameObject.Find ("DifficultyText").GetComponent<Text>();
-        difficultyText.text = "難易度 : " + difficulty.ToString ();
+        difficultyText.text = "レベル" + difficulty.ToString ();
 
         turnText = GameObject.Find ("TurnText").GetComponent<Text> ();
         turnText.text = "残り10ターン";
@@ -113,11 +123,12 @@ public class GameScene : MonoBehaviour {
                 enableStart = 1;
             }
             if (enableStart == 1) {
+                questionText.text = "Startボタンを押してね";
                 startButton.SetActive (true);
                 SetJoinedPlayer();
+                myPv.RPC ("SetPlayerName", PhotonTargets.All, GameManager.instance.CharacterId, GameManager.instance.name);
             }
         }
-
 
 		if (!isInitialized)
 		{
@@ -127,7 +138,6 @@ public class GameScene : MonoBehaviour {
 
 		if (bossHP - GameManager.instance.Score <= 0)
 		{
-			PhotonNetwork.Disconnect ();
 			Application.LoadLevel ("Result");
 		}
 
@@ -161,18 +171,25 @@ public class GameScene : MonoBehaviour {
     [PunRPC]
     void SetCorrect(int characterId, int playerDifficulty)
     {
+        correctCount++;
         GameObject target = characterDictionary [characterId].transform.GetChild (0).gameObject;
         target.SetActive (true);
         target.GetComponent<Image> ().sprite = circleSprites [playerDifficulty];
         GameManager.instance.Score += (playerDifficulty + 1) * 10;
     }
 
+    [PunRPC]
+    void SetPlayerName(int characterId, string playerName)
+    {
+        characterDictionary[characterId].transform.GetChild(1).gameObject.GetComponent<Text>().text = playerName;
+    }
+
     void StartQuestion()
     {
         playerAttacks.SetActive(false);
-        for (int i = 0; i < joinedPlayerObjectList.Count; i++) {
-            joinedPlayerObjectList [i].transform.GetChild (0).gameObject.SetActive (false);
-        }
+        //for (int i = 0; i < joinedPlayerObjectList.Count; i++) {
+        //    joinedPlayerObjectList [i].transform.GetChild (0).gameObject.SetActive (false);
+        //}
 
         questionText.text = "第" + questionIndex.ToString() + "問";
         answerNum = -1;
@@ -182,7 +199,11 @@ public class GameScene : MonoBehaviour {
     void SetQuestion()
     {
         questionManager.SetQuestion(difficulty);
-        
+
+        foreach (Button button in answerButtons)
+        {
+            button.gameObject.SetActive(true);
+        } 
         questionText = questionManager.questionText;
         answerText1 = questionManager.choiceText [0];
         answerText2 = questionManager.choiceText [1];
@@ -206,9 +227,49 @@ public class GameScene : MonoBehaviour {
 
     void SetAttack()
     {
-        playerAttacks.SetActive(true);
-        hpGuage.transform.localScale = new Vector3(1,(float)(bossHP - GameManager.instance.Score) / bossHP,1);
-        Invoke ("StartQuestion", 2.0f);
+        int i = 0;
+        foreach (GameObject target in characterDictionary.Values)
+        {
+            GameObject circle = target.transform.GetChild(0).gameObject;
+            if (circle.activeSelf)
+            {
+                iTween.MoveTo(circle, iTween.Hash(
+                    "position", panel.transform.position,
+                    "time", 0.5f, 
+                    "easeType", "linear",
+                    "oncomplete", "OnMoveComplete",
+                    "oncompletetarget", gameObject,
+                    "oncompleteparams", i
+                ));
+
+                iTween.ScaleTo(circle, iTween.Hash(
+                    "scale", new Vector3(0.4f,0.4f,0.4f),
+                    "time", 0.5f,
+                    "easeType", "easeOutCubic"
+                ));
+            }
+            else
+            {
+                OnMoveComplete(i);
+            }
+            i++;
+        }
+    }
+
+    public void OnMoveComplete(object index)
+    {
+        if (int.Parse(index.ToString()) == characterDictionary.Count - 1)
+        {
+            foreach (GameObject target in joinedPlayerObjectList)
+            {
+                target.transform.GetChild(0).gameObject.transform.position = target.transform.position;
+                iTween.ScaleTo(target.transform.GetChild(0).gameObject, Vector3.one, 0);
+                target.transform.GetChild(0).gameObject.SetActive(false);
+            }
+            playerAttacks.SetActive(true);
+            hpGuage.transform.localScale = new Vector3(1,(float)(bossHP - GameManager.instance.Score) / bossHP,1);
+            Invoke ("StartQuestion", 2.0f);
+        }
     }
 
 	public void onAnswerClick(int buttonNo) {
@@ -246,6 +307,7 @@ public class GameScene : MonoBehaviour {
 
     public void CheckAnswer()
     {
+        correctCount = 0;
         bool isCorrect = questionManager.IsCorrectAnswer (answerNum);
         if (isCorrect) {
             questionText.text = "正解";
