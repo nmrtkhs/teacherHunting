@@ -16,6 +16,6 @@ public class LobbyFlash : MonoBehaviour {
 	}
 
 	public void FlashAnimationFinish() {
-		EventSystem.GetComponent<LobbyScene>().LobbyInActvie = true;	
+		EventSystem.GetComponent<LobbyScene>().LobbyInActive = true;	
 	}
 }
