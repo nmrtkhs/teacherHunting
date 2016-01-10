@@ -152,7 +152,8 @@ public class QuestionManager : MonoBehaviour {
 //		ParseAnalytics.TrackEventAsync ("Answer", answerData);
 		
 		ParseObject parseObject = new ParseObject("AnswerLog");
-		parseObject["stage"] = currentStage;
+		parseObject ["name"] = GameManager.instance.name;
+		parseObject["stage"] = currentStage + 1;
 		parseObject["difficulty"] = currentDifficulty + 1;
 		parseObject["question"] = questionList[currentDifficulty][currentQuestionIndex];
 		parseObject["isCorrect"] = isCorrect;

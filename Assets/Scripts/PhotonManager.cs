@@ -37,7 +37,7 @@ public class PhotonManager : Photon.MonoBehaviour {
 	void OnJoinedRoom()
 	{
 		if (Application.loadedLevelName == "Lobby") {
-			Application.LoadLevel ("RegisterNew");
+			Application.LoadLevel ("RegisterName");
 		}
 	}
 }

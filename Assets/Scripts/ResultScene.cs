@@ -17,28 +17,26 @@ public class ResultScene : MonoBehaviour {
 	public Sprite enemyLose;
 	public Sprite backgroundWin;
 	public Sprite backgroundLose;
-
 	public bool ResultInActvie;
 	public GameObject Canvas;
 
-
 	private PhotonView myPv;
-	private SortedDictionary<int, int> memberScore;
-	private SortedDictionary<int, int> memberCorrectAnswerNum;
-	private SortedDictionary<int, int> memberInCorrectAnswerNum;
+	private SortedDictionary<int, string> memberScore;
+	private SortedDictionary<int, string> memberCorrectAnswerNum;
+	private SortedDictionary<int, string> memberInCorrectAnswerNum;
 
 	private bool hasSetRankingList = false;
 	private bool win = true;
 
-	[PunRPC]	//TODO change characterId to characterName
-	void SetMemberScore(int characterId, int score){
-		memberScore.Add (score, characterId);
+	[PunRPC]
+	void SetMemberScore(string characterName, int score){
+		memberScore.Add (score, characterName);
 	}
 
-	[PunRPC]	//TODO change characterId to characterName
-	void SetMemberAnswerNum(int characterId, int correctAnswerNum, int inCorrectAnswerNum){
-		memberCorrectAnswerNum.Add (correctAnswerNum, characterId);
-		memberInCorrectAnswerNum.Add (inCorrectAnswerNum, characterId);
+	[PunRPC]
+	void SetMemberAnswerNum(string characterName, int correctAnswerNum, int inCorrectAnswerNum){
+		memberCorrectAnswerNum.Add (correctAnswerNum, characterName);
+		memberInCorrectAnswerNum.Add (inCorrectAnswerNum, characterName);
 	}
 
 
@@ -52,12 +50,12 @@ public class ResultScene : MonoBehaviour {
 
 		myPv = this.GetComponent<PhotonView>();
 
-		memberScore = new SortedDictionary<int, int>();
-		myPv.RPC ("SetMemberScore", PhotonTargets.All, GameManager.instance.CharacterId, GameManager.instance.SelfScore);
+		memberScore = new SortedDictionary<int, string>();
+		myPv.RPC ("SetMemberScore", PhotonTargets.All, GameManager.instance.name, GameManager.instance.SelfScore);
 
-		memberCorrectAnswerNum = new SortedDictionary<int, int>();
-		memberInCorrectAnswerNum = new SortedDictionary<int, int>();
-		myPv.RPC ("SetMemberAnswerNum", PhotonTargets.All, GameManager.instance.CharacterId, GameManager.instance.CorrectAnswerNum, GameManager.instance.IncorrectAnswerNum);
+		memberCorrectAnswerNum = new SortedDictionary<int, string>();
+		memberInCorrectAnswerNum = new SortedDictionary<int, string>();
+		myPv.RPC ("SetMemberAnswerNum", PhotonTargets.All, GameManager.instance.name, GameManager.instance.CorrectAnswerNum, GameManager.instance.IncorrectAnswerNum);
 
 		GameObject.Find("HpGuage").transform.localScale = new Vector3(1, (GameManager.instance.BossHp > GameManager.instance.Score)? (float)(GameManager.instance.BossHp - GameManager.instance.Score) / GameManager.instance.BossHp : 0, 1);
 
