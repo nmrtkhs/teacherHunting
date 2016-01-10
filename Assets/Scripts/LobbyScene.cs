@@ -8,7 +8,7 @@ public class LobbyScene : MonoBehaviour {
 	public bool LobbyInActive;
 	public GameObject Flash;
 
-	private int m_Level;
+	//private int m_Level;
 	
 	// Use this for initialization
 	private PhotonManager pm;
@@ -70,7 +70,7 @@ public class LobbyScene : MonoBehaviour {
         }
 	    Flash.GetComponent<Animator>().SetTrigger("OnClick");
 		if(LobbyInActive == true){
-			SceneChange(m_Level);
+			SceneChange(i);
 			LobbyInActive = false;
 		}
 	}
