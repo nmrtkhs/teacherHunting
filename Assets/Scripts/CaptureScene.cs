@@ -56,7 +56,7 @@ public class CaptureScene : MonoBehaviour {
 		var bytes = texture.EncodeToPNG();
 //		var bytes = outputTexture.EncodeToPNG();
 
-		File.WriteAllBytes(Application.persistentDataPath + "/me.png", bytes);
+//		File.WriteAllBytes(Application.persistentDataPath + "/me.png", bytes);
 //		File.WriteAllBytes(Application.dataPath + "/me.png", bytes);
 
 		webcamTexture.Stop();
