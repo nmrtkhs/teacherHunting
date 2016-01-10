@@ -18,6 +18,9 @@ public class ResultScene : MonoBehaviour {
 	public Sprite backgroundWin;
 	public Sprite backgroundLose;
 
+	public bool ResultInActvie;
+	public GameObject Canvas;
+
 
 	private PhotonView myPv;
 	private SortedDictionary<int, int> memberScore;
@@ -74,6 +77,11 @@ public class ResultScene : MonoBehaviour {
 		if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
 			SetRankingList ();
 		}
+
+		if(ResultInActvie == true){
+			SceneChange();
+			ResultInActvie = false;
+		}
 	}
 
 	void SetRankingList(){
@@ -119,6 +127,10 @@ public class ResultScene : MonoBehaviour {
 	}
 	
 	public void onLobbySelectClick() {
+		Canvas.GetComponent<Animator>().SetTrigger("OnClick");
+	}
+
+	public void SceneChange() {
 		PhotonNetwork.Disconnect ();
 		Application.LoadLevel ("Lobby");
 	}
