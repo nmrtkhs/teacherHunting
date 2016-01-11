@@ -11,7 +11,7 @@ public class TitleScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		AudioManager.Instance.PlayBGM ("stratbgm");
+		AudioManager.Instance.PlayBGM ("stratbgm", 0.5f);
 	}
 
 	// Update is called once per frame
