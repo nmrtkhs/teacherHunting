@@ -74,7 +74,7 @@ public class GameScene : MonoBehaviour {
 		questionManager.LoadQuestion (GameManager.instance.SelectLevel);
 
         questionText = GameObject.Find ("QuestionText").GetComponent<Text> ();
-        questionText.text = "みんなが入るまで待ってね";
+		questionText.text = "みんなの じゅんびが\nできるまで まってね";
 
         answerText1 = GameObject.Find ("AnswerText1").GetComponent<Text> ();
         answerText2 = GameObject.Find ("AnswerText2").GetComponent<Text> ();
