@@ -18,7 +18,6 @@ public class ResultScene : MonoBehaviour {
 	public Sprite backgroundWin;
 	public Sprite backgroundLose;
 	public bool ResultActvie;
-	public bool ResultInActvie;
 	public GameObject Canvas;
 	public GameObject Ending;
 	
@@ -93,11 +92,6 @@ public class ResultScene : MonoBehaviour {
 			if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
 				SetRankingList ();
 			}
-
-			if (ResultInActvie == true) {
-				SceneChange ();
-				ResultInActvie = false;
-			}
 		}
 	}
 
@@ -143,11 +137,11 @@ public class ResultScene : MonoBehaviour {
 		hasSetRankingList = true;
 	}
 	
-	public void onLobbySelectClick() {
-		Canvas.GetComponent<Animator>().SetTrigger("OnClick");
+	public void OnLobbySelectClick() {
+		Canvas.GetComponent<Animator>().SetTrigger("OnLobbySelect");
 	}
 
-	public void SceneChange() {
+	public void BackToLobby() {
 		PhotonNetwork.Disconnect ();
 		Application.LoadLevel ("Lobby");
 	}

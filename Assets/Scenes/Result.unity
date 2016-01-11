@@ -101,7 +101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &66050025
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1741,7 +1741,6 @@ MonoBehaviour:
   backgroundWin: {fileID: 21300000, guid: 67f436a094b8e4d4d9b49e104555cfef, type: 3}
   backgroundLose: {fileID: 21300000, guid: c0d5aae1b177e90429c62fb34b09e034, type: 3}
   ResultActvie: 0
-  ResultInActvie: 0
   Canvas: {fileID: 744754270}
   Ending: {fileID: 66050024}
 --- !u!114 &1063085344
