@@ -3917,7 +3917,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Start\u3092\u304A\u3057\u3066\u304F\u3060\u3055\u3044"
+  m_Text: "\u30B9\u30BF\u30FC\u30C8\u3092\u304A\u3057\u3066\u306D"
 --- !u!222 &1756162450
 CanvasRenderer:
   m_ObjectHideFlags: 0

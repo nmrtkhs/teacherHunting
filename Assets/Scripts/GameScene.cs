@@ -147,7 +147,7 @@ public class GameScene : MonoBehaviour {
                 enableStart = 1;
             }
             if (enableStart == 1) {
-                questionText.text = "Startボタンを押してね";
+				questionText.text = "スタートをおしてね";
                 startButton.SetActive (true);
                 SetJoinedPlayer();
                 myPv.RPC ("SetPlayerName", PhotonTargets.All, GameManager.instance.CharacterId, GameManager.instance.name);
