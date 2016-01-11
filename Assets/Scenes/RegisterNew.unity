@@ -813,7 +813,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u304B\u3093\u305F\u3093"
+  m_Text: "\u3048\u3089\u3093\u3067\u306D"
 --- !u!222 &139209432
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5044,6 +5044,8 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: "\u3048\u3089\u3093\u3067\u306D"
+      m_Image: {fileID: 0}
     - m_Text: "\u304B\u3093\u305F\u3093"
       m_Image: {fileID: 0}
     - m_Text: "\u3075\u3064\u3046"
