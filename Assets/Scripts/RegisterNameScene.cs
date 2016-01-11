@@ -33,6 +33,7 @@ public class RegisterNameScene : MonoBehaviour {
 	}
 
 	public void OnBackClick() {
+		PhotonNetwork.Disconnect ();
 		Application.LoadLevel ("Lobby");
 	}
 }
