@@ -22,17 +22,11 @@ public class ResultScene : MonoBehaviour {
 	public GameObject Ending;
 	
 	private PhotonView myPv;
-	private SortedDictionary<int, string> memberScore;
 	private SortedDictionary<int, string> memberCorrectAnswerNum;
 	private SortedDictionary<int, string> memberInCorrectAnswerNum;
 
 	private bool hasSetRankingList = false;
 	private bool win = true;
-
-	[PunRPC]
-	void SetMemberScore(string characterName, int score){
-		memberScore.Add (score, characterName);
-	}
 
 	[PunRPC]
 	void SetMemberAnswerNum(string characterName, int correctAnswerNum, int inCorrectAnswerNum){
@@ -43,6 +37,9 @@ public class ResultScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		memberCorrectAnswerNum = new SortedDictionary<int, string>();
+		memberInCorrectAnswerNum = new SortedDictionary<int, string>();
+
 		win = (GameManager.instance.BossHp <= GameManager.instance.Score);
 
 		if (win && GameManager.instance.SelectLevel == 5) {
@@ -63,9 +60,6 @@ public class ResultScene : MonoBehaviour {
 				+ "もん中、\n" + GameManager.instance.CorrectAnswerNum.ToString() + "もんせいかい！";
 
 		myPv = this.GetComponent<PhotonView>();
-
-		memberScore = new SortedDictionary<int, string>();
-		myPv.RPC ("SetMemberScore", PhotonTargets.All, GameManager.instance.name, GameManager.instance.SelfScore);
 
 		memberCorrectAnswerNum = new SortedDictionary<int, string>();
 		memberInCorrectAnswerNum = new SortedDictionary<int, string>();
@@ -120,7 +114,7 @@ public class ResultScene : MonoBehaviour {
 		float correctAnswerRate = (sumCorrectAnswerNum + sumInCorrectAnswerNum > 0? (float)sumCorrectAnswerNum / (sumCorrectAnswerNum + sumInCorrectAnswerNum): 0.0f);
 
 		Image playRank = GameObject.Find ("PlayRank").GetComponent<Image> ();
-		if (GameManager.instance.BossHp > GameManager.instance.Score) {
+		if (!win) {
 			playRank.sprite = rankE;
 		} else if (correctAnswerRate < 0.2f) {
 			playRank.sprite = rankD;

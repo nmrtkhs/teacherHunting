@@ -31,9 +31,9 @@ public class QuestionManager : MonoBehaviour {
 		answerList.Add(new List<List<string>>());
 	}
 
-	// Update is called once per frame
-	void Update () {
-
+	void Start () {
+		GameManager.instance.IncorrectAnswerNum = 0;
+		GameManager.instance.CorrectAnswerNum = 0;
 	}
 
 	public void LoadQuestion (int stage) {
