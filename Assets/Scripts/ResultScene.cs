@@ -18,7 +18,6 @@ public class ResultScene : MonoBehaviour {
 	public Sprite backgroundWin;
 	public Sprite backgroundLose;
 	public bool ResultActvie;
-	public bool ResultInActvie;
 	public GameObject Canvas;
 	public GameObject Ending;
 	
@@ -50,13 +49,13 @@ public class ResultScene : MonoBehaviour {
 			Ending.SetActive(true);
 			ResultActvie = false;
 		} else {
-			Ending.SetActive(false);
 			ResultOn();
 		}
 	}
 
 	public void ResultOn() {
 		ResultActvie = true;
+		Ending.SetActive (false);
 		Canvas.GetComponent<Animator>().SetTrigger("OnResultStart");
 
 		GameObject.Find ("MyResultText").GetComponent<Text> ().text = 
@@ -92,11 +91,6 @@ public class ResultScene : MonoBehaviour {
 		if (ResultActvie) {
 			if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
 				SetRankingList ();
-			}
-
-			if (ResultInActvie == true) {
-				SceneChange ();
-				ResultInActvie = false;
 			}
 		}
 	}
@@ -143,11 +137,11 @@ public class ResultScene : MonoBehaviour {
 		hasSetRankingList = true;
 	}
 	
-	public void onLobbySelectClick() {
-		Canvas.GetComponent<Animator>().SetTrigger("OnClick");
+	public void OnLobbySelectClick() {
+		Canvas.GetComponent<Animator>().SetTrigger("OnLobbySelect");
 	}
 
-	public void SceneChange() {
+	public void BackToLobby() {
 		PhotonNetwork.Disconnect ();
 		Application.LoadLevel ("Lobby");
 	}
