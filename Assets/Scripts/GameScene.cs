@@ -158,6 +158,7 @@ public class GameScene : MonoBehaviour {
 		{
 			bossHP = 100 * PhotonNetwork.playerList.Length;
 			isInitialized = true;
+			GameManager.instance.BossHp = bossHP;
 		}
 
 		if (bossHP - GameManager.instance.Score <= 0 || remainTurn < 1)
