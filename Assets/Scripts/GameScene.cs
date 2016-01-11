@@ -101,23 +101,23 @@ public class GameScene : MonoBehaviour {
         difficultyText = GameObject.Find ("DifficultyText").GetComponent<Text>();
         switch (difficulty) {
         case 1:
-            difficultyText.text = "かんたん";
+			difficultyText.text = "レベル\nかんたん";
             break;
         case 2:
-            difficultyText.text = "ふつう";
+			difficultyText.text = "レベル\nふつう";
             break;
         case 3:
-            difficultyText.text = "むずかしい";
+			difficultyText.text = "レベル\nむずかしい";
             break;
         default:
-            difficultyText.text = "かんたん";
+			difficultyText.text = "レベル\nかんたん";
             break;
         }
 
         turnText = GameObject.Find ("TurnText").GetComponent<Text> ();
-        turnText.text = "残り10ターン";
+		turnText.text = "のこり10ターン";
         timeText = GameObject.Find ("TimeText").GetComponent<Text> ();
-        timeText.text = "残り10秒";
+		timeText.text = "のこり10びょう";
 
         joinedPlayers = GameObject.Find ("JoinedPlayers");
         joinedPlayerObjectList = new List<GameObject> ();
@@ -170,13 +170,13 @@ public class GameScene : MonoBehaviour {
         if (isAnswering)
         {
             remainTime -= Time.deltaTime;
-            timeText.text = "残り" + Mathf.Floor(remainTime).ToString() + "秒";
+			timeText.text = "のこり" + Mathf.Floor(remainTime).ToString() + "びょう";
 
             if (remainTime <= 0)
             {
                 isAnswering = false;
                 remainTime = 10.0f;
-                timeText.text = "おしまい";
+                timeText.text = "";
                 CheckAnswer();
             }
         }
@@ -215,7 +215,7 @@ public class GameScene : MonoBehaviour {
     {
         enemyImage.sprite = enemySprites [GameManager.instance.SelectLevel];
         lightBeam.SetActive(false);
-        questionText.text = "第" + questionIndex.ToString() + "問";
+		questionText.text = "だい" + questionIndex.ToString() + "もん";
         answerNum = -1;
         Invoke ("SetQuestion", 1.0f);
     }
@@ -339,18 +339,18 @@ public class GameScene : MonoBehaviour {
         correctCount = 0;
         bool isCorrect = questionManager.IsCorrectAnswer (answerNum);
         if (isCorrect) {
-            questionText.text = "正解";
+			questionText.text = "せいかい";
             AudioManager.Instance.PlaySE("seikai");
             myPv.RPC ("SetCorrect", PhotonTargets.All, GameManager.instance.CharacterId, difficulty - 1);
         } else {
             AudioManager.Instance.PlaySE("fuseikai");
-            questionText.text = "不正解";
+			questionText.text = "ふせいかい";
         }
         foreach (Button button in answerButtons) {
             button.image.color = Color.white;
         }
         remainTurn--;
-        turnText.text = "残り" + remainTurn.ToString() + "ターン";
+		turnText.text = "のこり" + remainTurn.ToString() + "ターン";
         Invoke ("SetAttack", 1.0f);
     }
 
