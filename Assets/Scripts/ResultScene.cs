@@ -49,13 +49,13 @@ public class ResultScene : MonoBehaviour {
 			Ending.SetActive(true);
 			ResultActvie = false;
 		} else {
-			Ending.SetActive(false);
 			ResultOn();
 		}
 	}
 
 	public void ResultOn() {
 		ResultActvie = true;
+		Ending.SetActive (false);
 		Canvas.GetComponent<Animator>().SetTrigger("OnResultStart");
 
 		GameObject.Find ("MyResultText").GetComponent<Text> ().text = 
