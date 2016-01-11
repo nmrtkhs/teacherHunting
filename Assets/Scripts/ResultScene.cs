@@ -37,6 +37,9 @@ public class ResultScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		memberCorrectAnswerNum = new SortedDictionary<int, string>();
+		memberInCorrectAnswerNum = new SortedDictionary<int, string>();
+
 		win = (GameManager.instance.BossHp <= GameManager.instance.Score);
 
 		if (win && GameManager.instance.SelectLevel == 5) {
