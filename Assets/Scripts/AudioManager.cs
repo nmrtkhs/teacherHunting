@@ -75,12 +75,14 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager> {
 		this.seSources.ForEach(s => s.Stop());
 	}
 
-	public void PlayBGM(string bgmName)
+	public void PlayBGM (string bgmName, float volume = 1.0f, bool loop = true)
 	{
 		if(!this.bgmDict.ContainsKey(bgmName)) throw new ArgumentException(bgmName + " not found","bgmName");  
 		if(this.bgmSource.clip == this.bgmDict[bgmName]) return;
 		this.bgmSource.Stop();
 		this.bgmSource.clip = this.bgmDict[bgmName];
+		this.bgmSource.loop = loop;
+		this.bgmSource.volume = volume;
 		this.bgmSource.Play(); 
 	}
 

@@ -43,6 +43,7 @@ public class ResultScene : MonoBehaviour {
 		win = (GameManager.instance.BossHp <= GameManager.instance.Score);
 
 		if (win && GameManager.instance.SelectLevel == 5) {
+			AudioManager.Instance.PlayBGM("endingbgm", 0.5f);
 			Ending.SetActive(true);
 			ResultActvie = false;
 		} else {
@@ -54,6 +55,8 @@ public class ResultScene : MonoBehaviour {
 		ResultActvie = true;
 		Ending.SetActive (false);
 		Canvas.GetComponent<Animator>().SetTrigger("OnResultStart");
+
+		AudioManager.Instance.PlayBGM(win ? "resultclearbgm" : "resultfailbgm", 0.5f);
 
 		GameObject.Find ("MyResultText").GetComponent<Text> ().text = 
 			(GameManager.instance.CorrectAnswerNum + GameManager.instance.IncorrectAnswerNum).ToString ()
@@ -137,6 +140,7 @@ public class ResultScene : MonoBehaviour {
 
 	public void BackToLobby() {
 		PhotonNetwork.Disconnect ();
+		AudioManager.Instance.PlayBGM ("stratbgm", 0.5f);
 		Application.LoadLevel ("Lobby");
 	}
 }
