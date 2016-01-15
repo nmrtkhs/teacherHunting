@@ -30,7 +30,7 @@ public class RegisterNewScene : MonoBehaviour {
 	{
 		GameObject targetCharacter = characterButtonList.transform.GetChild(id - 1).gameObject;
 		targetCharacter.GetComponent<Image>().color = new Color(0.5f,0.5f,0.5f,1);
-		disableList.Add(id);
+		disableList.Add(id - 1);
 	}
 
 	public void OnBackButtonClicke() {
