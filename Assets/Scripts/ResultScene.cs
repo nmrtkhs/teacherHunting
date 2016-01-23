@@ -22,23 +22,23 @@ public class ResultScene : MonoBehaviour {
 	public GameObject Ending;
 	
 	private PhotonView myPv;
-	private SortedDictionary<int, string> memberCorrectAnswerNum;
-	private SortedDictionary<int, string> memberInCorrectAnswerNum;
+	private Dictionary<string, int> memberCorrectAnswerNum;
+	private Dictionary<string, int> memberInCorrectAnswerNum;
 
 	private bool hasSetRankingList = false;
 	private bool win = true;
 
 	[PunRPC]
 	void SetMemberAnswerNum(string characterName, int correctAnswerNum, int inCorrectAnswerNum){
-		memberCorrectAnswerNum.Add (correctAnswerNum, characterName);
-		memberInCorrectAnswerNum.Add (inCorrectAnswerNum, characterName);
+		memberCorrectAnswerNum.Add (characterName, correctAnswerNum);
+		memberInCorrectAnswerNum.Add (characterName, inCorrectAnswerNum);
 	}
 
 
 	// Use this for initialization
 	void Start () {
-		memberCorrectAnswerNum = new SortedDictionary<int, string>();
-		memberInCorrectAnswerNum = new SortedDictionary<int, string>();
+		memberCorrectAnswerNum = new Dictionary<string, int>();
+		memberInCorrectAnswerNum = new Dictionary<string, int>();
 
 		win = (GameManager.instance.BossHp <= GameManager.instance.Score);
 
@@ -64,8 +64,8 @@ public class ResultScene : MonoBehaviour {
 
 		myPv = this.GetComponent<PhotonView>();
 
-		memberCorrectAnswerNum = new SortedDictionary<int, string>();
-		memberInCorrectAnswerNum = new SortedDictionary<int, string>();
+		memberCorrectAnswerNum = new Dictionary<string, int>();
+		memberInCorrectAnswerNum = new Dictionary<string, int>();
 		myPv.RPC ("SetMemberAnswerNum", PhotonTargets.All, GameManager.instance.name, GameManager.instance.CorrectAnswerNum, GameManager.instance.IncorrectAnswerNum);
 
 		GameObject.Find("HpGuage").transform.localScale = new Vector3(1, (GameManager.instance.BossHp > GameManager.instance.Score)? (float)(GameManager.instance.BossHp - GameManager.instance.Score) / GameManager.instance.BossHp : 0, 1);
@@ -86,32 +86,41 @@ public class ResultScene : MonoBehaviour {
 	void Update () {
 
 		if (ResultActvie) {
-			//if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
-				SetRankingList ();
-			//}
+			UpdateRankingList ();
 		}
 	}
 
-	void SetRankingList(){
+	void UpdateRankingList(){
 		int playerNum = memberCorrectAnswerNum.Count;
 		int sumCorrectAnswerNum = 0;
 		int sumInCorrectAnswerNum = 0;
 
-		int i = 0;
+		var rank = new List< KeyValuePair <string, int> >();
+		rank.Add(new KeyValuePair<string, int> ("", -1));
+		rank.Add(new KeyValuePair<string, int> ("", -1));
+		rank.Add(new KeyValuePair<string, int> ("", -1));
+
 		foreach (var member in memberCorrectAnswerNum) {
-			if (i == playerNum - 1) {
-				GameObject.Find("Ranking").GetComponentsInChildren<Text>()[1].text = member.Value.ToString();
-			} else if (i == playerNum - 2) {
-				GameObject.Find("Ranking (1)").GetComponentsInChildren<Text>()[1].text = member.Value.ToString();
-			} else if (i == playerNum - 3) {
-				GameObject.Find("Ranking (2)").GetComponentsInChildren<Text>()[1].text = member.Value.ToString();
+			if (member.Value > rank [0].Value) {
+				rank [2] = rank [1];
+				rank [1] = rank [0];
+				rank [0] = member;
+			} else if (member.Value > rank [1].Value) {
+				rank [2] = rank [1];
+				rank [1] = member;
+			} else if (member.Value > rank [2].Value) {
+				rank [2] = member;
 			}
-			sumCorrectAnswerNum += member.Key;
-			i++;
+
+			sumCorrectAnswerNum += member.Value;
 		}
 
+		GameObject.Find("Ranking").GetComponentsInChildren<Text>()[1].text = rank[0].Key;
+		GameObject.Find("Ranking (1)").GetComponentsInChildren<Text>()[1].text = rank[1].Key;
+		GameObject.Find("Ranking (2)").GetComponentsInChildren<Text> () [1].text = rank [2].Key;
+
 		foreach (var member in memberInCorrectAnswerNum) {
-			sumInCorrectAnswerNum += member.Key;
+			sumInCorrectAnswerNum += member.Value;
 		}
 
 		float correctAnswerRate = (sumCorrectAnswerNum + sumInCorrectAnswerNum > 0? (float)sumCorrectAnswerNum / (sumCorrectAnswerNum + sumInCorrectAnswerNum): 0.0f);
