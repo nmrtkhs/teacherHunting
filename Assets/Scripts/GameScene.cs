@@ -99,8 +99,7 @@ public class GameScene : MonoBehaviour {
         questionIndex = 1;
         answerNum = -1;
         remainTurn = 10;
-		remainTurn = 3;
-		remainTime = 10.0f;
+        remainTime = 10.0f;
         isAnswering = false;
         difficulty = GameManager.instance.difficulty;
         difficultyText = GameObject.Find ("DifficultyText").GetComponent<Text>();
@@ -163,7 +162,6 @@ public class GameScene : MonoBehaviour {
 		{
 			bossHP = 100 * PhotonNetwork.playerList.Length;
 			isInitialized = true;
-			bossHP = 30;
 			GameManager.instance.BossHp = bossHP;
 		}
 
