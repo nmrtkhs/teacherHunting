@@ -86,9 +86,9 @@ public class ResultScene : MonoBehaviour {
 	void Update () {
 
 		if (ResultActvie) {
-			if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
+			//if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
 				SetRankingList ();
-			}
+			//}
 		}
 	}
 
