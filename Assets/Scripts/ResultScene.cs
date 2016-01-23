@@ -28,15 +28,26 @@ public class ResultScene : MonoBehaviour {
 	private bool hasSetRankingList = false;
 	private bool win = true;
 
+	private float updateTimer;
+
 	[PunRPC]
 	void SetMemberAnswerNum(string characterName, int correctAnswerNum, int inCorrectAnswerNum){
-		memberCorrectAnswerNum.Add (characterName, correctAnswerNum);
-		memberInCorrectAnswerNum.Add (characterName, inCorrectAnswerNum);
+		if (memberCorrectAnswerNum.ContainsKey (characterName)) {
+			memberCorrectAnswerNum [characterName] = correctAnswerNum;
+		} else {
+			memberCorrectAnswerNum.Add (characterName, correctAnswerNum);
+		}
+		if (memberInCorrectAnswerNum.ContainsKey (characterName)) {
+			memberInCorrectAnswerNum [characterName] = inCorrectAnswerNum;
+		} else {
+			memberInCorrectAnswerNum.Add (characterName, inCorrectAnswerNum);
+		}
 	}
 
 
 	// Use this for initialization
 	void Start () {
+		updateTimer = 0.0f;
 		memberCorrectAnswerNum = new Dictionary<string, int>();
 		memberInCorrectAnswerNum = new Dictionary<string, int>();
 
@@ -81,11 +92,14 @@ public class ResultScene : MonoBehaviour {
 		}
 	}
 
-	
 	// Update is called once per frame	
 	void Update () {
-
 		if (ResultActvie) {
+			updateTimer += Time.deltaTime;
+			if (updateTimer > 1.0f) {
+				updateTimer = 0.0f;
+				myPv.RPC ("SetMemberAnswerNum", PhotonTargets.All, GameManager.instance.name, GameManager.instance.CorrectAnswerNum, GameManager.instance.IncorrectAnswerNum);
+			}
 			UpdateRankingList ();
 		}
 	}
