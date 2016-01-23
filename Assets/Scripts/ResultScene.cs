@@ -97,6 +97,7 @@ public class ResultScene : MonoBehaviour {
 		if (ResultActvie) {
 			updateTimer += Time.deltaTime;
 			if (updateTimer > 1.0f) {
+				Debug.Log("Send");
 				updateTimer = 0.0f;
 				myPv.RPC ("SetMemberAnswerNum", PhotonTargets.All, GameManager.instance.name, GameManager.instance.CorrectAnswerNum, GameManager.instance.IncorrectAnswerNum);
 			}
@@ -115,14 +116,14 @@ public class ResultScene : MonoBehaviour {
 		rank.Add(new KeyValuePair<string, int> ("", -1));
 
 		foreach (var member in memberCorrectAnswerNum) {
-			if (member.Value > rank [0].Value) {
+			if (member.Value > rank [0].Value || ( (member.Value == rank[0].Value) && (member.Key.CompareTo(rank[0].Key) < 0) ) ) {
 				rank [2] = rank [1];
 				rank [1] = rank [0];
 				rank [0] = member;
-			} else if (member.Value > rank [1].Value) {
+			} else if (member.Value > rank [1].Value || ( (member.Value == rank[1].Value) && (member.Key.CompareTo(rank[1].Key) < 0) ) ) {
 				rank [2] = rank [1];
 				rank [1] = member;
-			} else if (member.Value > rank [2].Value) {
+			} else if (member.Value > rank [2].Value || ( (member.Value == rank[2].Value) && (member.Key.CompareTo(rank[2].Key) < 0) ) ) {
 				rank [2] = member;
 			}
 
