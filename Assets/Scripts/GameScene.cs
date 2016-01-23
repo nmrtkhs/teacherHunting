@@ -50,6 +50,8 @@ public class GameScene : MonoBehaviour {
     private int correctCount;
 	private QuestionManager questionManager;
 
+	private Color BUTTON_DEFAULT_COLOR;
+
 	// Use this for initialization
 	void Start () {
 		buttonText = new Text[4];
@@ -86,6 +88,8 @@ public class GameScene : MonoBehaviour {
         answerButtons [1] = GameObject.Find ("AnswerButton2").GetComponent<Button> ();
         answerButtons [2] = GameObject.Find ("AnswerButton3").GetComponent<Button> ();
         answerButtons [3] = GameObject.Find ("AnswerButton4").GetComponent<Button> ();
+
+		BUTTON_DEFAULT_COLOR = new Color (255.0f/255, 190.0f/255, 120.0f/255);
 
         foreach (Button button in answerButtons)
         {
@@ -216,6 +220,10 @@ public class GameScene : MonoBehaviour {
         lightBeam.SetActive(false);
 		questionText.text = "だい" + questionIndex.ToString() + "もん";
         answerNum = -1;
+
+		foreach (var button in answerButtons) {
+			button.image.color = BUTTON_DEFAULT_COLOR;
+		}
         Invoke ("SetQuestion", 1.0f);
     }
 
@@ -232,6 +240,9 @@ public class GameScene : MonoBehaviour {
         answerText2 = questionManager.choiceText [1];
         answerText3 = questionManager.choiceText [2];
         answerText4 = questionManager.choiceText [3];
+		foreach (var button in answerButtons) {
+			button.interactable = true;
+		}
 
         questionIndex++;
         isAnswering = true;
@@ -328,7 +339,7 @@ public class GameScene : MonoBehaviour {
 	public void onAnswerClick(int buttonNo) {
         answerNum = buttonNo;
         foreach (Button button in answerButtons) {
-            button.image.color = Color.white;
+			button.image.color = BUTTON_DEFAULT_COLOR;
         }
         answerButtons [buttonNo].image.color = new Color (0.5f, 1, 1, 1);
 	}
@@ -344,9 +355,6 @@ public class GameScene : MonoBehaviour {
         } else {
             AudioManager.Instance.PlaySE("fuseikai");
 			questionText.text = "ふせいかい";
-        }
-        foreach (Button button in answerButtons) {
-            button.image.color = Color.white;
         }
         remainTurn--;
 		turnText.text = "のこり" + remainTurn.ToString() + "ターン";
