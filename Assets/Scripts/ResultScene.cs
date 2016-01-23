@@ -86,13 +86,11 @@ public class ResultScene : MonoBehaviour {
 	void Update () {
 
 		if (ResultActvie) {
-			if (!hasSetRankingList && memberCorrectAnswerNum.Count >= PhotonNetwork.playerList.Length) {
-				SetRankingList ();
-			}
+			UpdateRankingList ();
 		}
 	}
 
-	void SetRankingList(){
+	void UpdateRankingList(){
 		int playerNum = memberCorrectAnswerNum.Count;
 		int sumCorrectAnswerNum = 0;
 		int sumInCorrectAnswerNum = 0;
